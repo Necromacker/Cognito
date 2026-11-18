@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const fs = require('fs');
 const { runMigrations } = require('./db/migrations');
+const { DATA_DIR } = require('./db/database');
 
 // Run DB migrations automatically on server boot
 runMigrations();
@@ -49,7 +50,7 @@ const limiter = rateLimit({
 app.use('/api/', limiter);
 
 // Serve uploads statically
-const UPLOAD_DIR = path.join(__dirname, '..', 'data', 'uploads');
+const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(DATA_DIR, 'uploads');
 app.use('/uploads', express.static(UPLOAD_DIR));
 
 // Register API Routes

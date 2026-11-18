@@ -6,9 +6,9 @@ const archiver = require('archiver');
 const unzipper = require('unzipper');
 const multer = require('multer');
 const { authenticateToken, authorizeRoles, auditLog } = require('../middleware/auth');
+const { DATA_DIR } = require('../db/database');
 
-const DATA_DIR = path.join(__dirname, '..', '..', 'data');
-const uploadZip = multer({ dest: path.join(__dirname, '..', '..', 'data', 'temp_restore') });
+const uploadZip = multer({ dest: path.join(DATA_DIR, 'temp_restore') });
 
 // Export backup ZIP
 router.get('/export', authenticateToken, authorizeRoles('caretaker', 'admin'), auditLog('BACKUP_EXPORT'), (req, res) => {

@@ -1,0 +1,27 @@
+# Netlify Configuration for Cognito
+
+[build]
+  base = "client"
+  publish = "dist"
+  command = "npm run build"
+
+# 1. Forward all API calls to your Render backend instance
+# Replace 'https://cognito-backend.onrender.com' with your actual Render service URL if different
+[[redirects]]
+  from = "/api/*"
+  to = "https://cognito-backend.onrender.com/api/:splat"
+  status = 200
+  force = true
+
+# 2. Forward patient uploaded photos & media to Render backend
+[[redirects]]
+  from = "/uploads/*"
+  to = "https://cognito-backend.onrender.com/uploads/:splat"
+  status = 200
+  force = true
+
+# 3. Single Page App fallback routing for React Router
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
