@@ -4,6 +4,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const fs = require('fs');
 const { runMigrations } = require('./db/migrations');
 
 // Run DB migrations automatically on server boot
@@ -14,12 +15,23 @@ const PORT = process.env.PORT || 3001;
 
 // Security Middleware
 app.use(helmet({
+  contentSecurityPolicy: false,
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 
-// CORS configured for Vite dev server (port 5173) and local network
+// CORS configured for Vite dev server and production domains
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',').map(s => s.trim())
+  : ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:3000', 'http://localhost:3001'];
+
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:3000'],
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    // Allow dynamic origins for self-hosted instances
+    return callback(null, true);
+  },
   credentials: true
 }));
 
@@ -63,6 +75,18 @@ app.get('/api/health', (req, res) => {
     disclaimer: 'This app supports cognitive engagement and tracking. It is not a diagnostic tool.'
   });
 });
+
+// Serve built frontend in production if client/dist exists
+const CLIENT_DIST = path.join(__dirname, '..', 'client', 'dist');
+if (fs.existsSync(CLIENT_DIST)) {
+  app.use(express.static(CLIENT_DIST));
+  app.get('*', (req, res, next) => {
+    if (req.url.startsWith('/api') || req.url.startsWith('/uploads')) {
+      return next();
+    }
+    res.sendFile(path.join(CLIENT_DIST, 'index.html'));
+  });
+}
 
 // Central error handler
 app.use((err, req, res, next) => {

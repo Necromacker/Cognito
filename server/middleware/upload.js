@@ -1,8 +1,9 @@
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const { DATA_DIR } = require('../db/database');
 
-const UPLOAD_ROOT = path.join(__dirname, '..', '..', 'data', 'uploads');
+const UPLOAD_ROOT = process.env.UPLOAD_DIR || path.join(DATA_DIR, 'uploads');
 
 if (!fs.existsSync(UPLOAD_ROOT)) {
   fs.mkdirSync(UPLOAD_ROOT, { recursive: true });
