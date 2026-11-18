@@ -12,10 +12,10 @@ router.get('/stats/:patientId', authenticateToken, (req, res) => {
     // Total attempts & accuracy
     const attemptsSummary = db.prepare(`
       SELECT
-        COUNT(*) as total_attempts,
-        SUM(is_correct) as correct_attempts,
-        AVG(response_time_ms) as avg_response_time,
-        SUM(hints_used) as total_hints
+        COUNT(a.id) as total_attempts,
+        SUM(a.is_correct) as correct_attempts,
+        AVG(a.response_time_ms) as avg_response_time,
+        SUM(a.hints_used) as total_hints
       FROM attempts a
       JOIN game_sessions s ON a.session_id = s.id
       WHERE s.patient_id = ?

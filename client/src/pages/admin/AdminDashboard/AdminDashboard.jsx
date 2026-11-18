@@ -33,35 +33,36 @@ export default function AdminDashboard() {
   return (
     <div className="admin-page">
       <div className="admin-container">
-        <h1 className="admin-title">🛡️ Administrator Management Portal</h1>
-
-        <div className="admin-tabs">
-          <button
-            type="button"
-            className={`admin-tab ${activeTab === 'users' ? 'admin-tab--active' : ''}`}
-            onClick={() => setActiveTab('users')}
-          >
-            Users & Doctor Verification ({users.length})
-          </button>
-          <button
-            type="button"
-            className={`admin-tab ${activeTab === 'audit' ? 'admin-tab--active' : ''}`}
-            onClick={() => setActiveTab('audit')}
-          >
-            Audit Logs ({auditLogs.length})
-          </button>
+        
+        <div className="admin-top-bar">
+          <div className="admin-tabs">
+            <button
+              type="button"
+              className={`admin-tab ${activeTab === 'users' ? 'admin-tab--active' : ''}`}
+              onClick={() => setActiveTab('users')}
+            >
+              USERS ({users.length})
+            </button>
+            <button
+              type="button"
+              className={`admin-tab ${activeTab === 'audit' ? 'admin-tab--active' : ''}`}
+              onClick={() => setActiveTab('audit')}
+            >
+              AUDIT TRAIL ({auditLogs.length})
+            </button>
+          </div>
         </div>
 
         {activeTab === 'users' ? (
-          <div className="admin-card">
+          <div className="admin-card card">
             <table className="admin-table">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Verification</th>
-                  <th>Actions</th>
+                  <th>NAME</th>
+                  <th>EMAIL</th>
+                  <th>ROLE</th>
+                  <th>VERIFICATION</th>
+                  <th>STATUS</th>
                 </tr>
               </thead>
               <tbody>
@@ -69,7 +70,7 @@ export default function AdminDashboard() {
                   <tr key={u.id}>
                     <td><strong>{u.name}</strong></td>
                     <td>{u.email}</td>
-                    <td><span className="role-badge">{u.role.toUpperCase()}</span></td>
+                    <td><span className="badge badge--pink">{u.role.toUpperCase()}</span></td>
                     <td>
                       {u.role === 'doctor' ? (
                         <button
@@ -77,7 +78,7 @@ export default function AdminDashboard() {
                           className={`verify-btn ${u.is_verified ? 'verify-btn--verified' : 'verify-btn--pending'}`}
                           onClick={() => handleVerifyDoctor(u.id, u.is_verified)}
                         >
-                          {u.is_verified ? 'Verified ✓' : 'Pending Verification ✕'}
+                          {u.is_verified ? 'VERIFIED' : 'PENDING'}
                         </button>
                       ) : (
                         '—'
@@ -89,7 +90,7 @@ export default function AdminDashboard() {
                         className="toggle-active-btn"
                         onClick={() => handleToggleActive(u.id)}
                       >
-                        {u.is_active ? 'Active' : 'Disabled'}
+                        {u.is_active ? 'ACTIVE' : 'DISABLED'}
                       </button>
                     </td>
                   </tr>
@@ -98,14 +99,14 @@ export default function AdminDashboard() {
             </table>
           </div>
         ) : (
-          <div className="admin-card">
+          <div className="admin-card card">
             <table className="admin-table">
               <thead>
                 <tr>
-                  <th>Timestamp</th>
-                  <th>User</th>
-                  <th>Action</th>
-                  <th>Details</th>
+                  <th>TIMESTAMP</th>
+                  <th>USER</th>
+                  <th>ACTION</th>
+                  <th>DETAILS</th>
                 </tr>
               </thead>
               <tbody>

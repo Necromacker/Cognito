@@ -95,7 +95,7 @@ router.get('/questions/:gameType/:patientId', authenticateToken, (req, res) => {
 
     // Check recent accuracy for adaptive difficulty
     const recentAttempts = db.prepare(`
-      SELECT is_correct FROM attempts a
+      SELECT a.is_correct FROM attempts a
       JOIN game_sessions s ON a.session_id = s.id
       WHERE s.patient_id = ? AND s.game_type = ?
       ORDER BY a.created_at DESC LIMIT 5
