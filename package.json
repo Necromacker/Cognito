@@ -4,10 +4,12 @@
   "description": "Cognito - A dementia care and cognitive engagement platform",
   "private": true,
   "scripts": {
+    "setup": "npm install && cd server && npm install && cd ../client && npm install && cd .. && npm run seed",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "cd server && node index.js",
     "client": "cd client && npx vite --host",
     "seed": "cd server && node seed.js",
+    "db:inspect": "node server/inspect_db.js",
     "build": "cd client && npx vite build",
     "migrate": "cd server && node migrate.js"
   },
