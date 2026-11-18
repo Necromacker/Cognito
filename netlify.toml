@@ -6,7 +6,6 @@
   command = "npm run build"
 
 # 1. Forward all API calls to your Render backend instance
-# Replace 'https://cognito-backend-xlyd.onrender.com' with your actual Render service URL if different
 [[redirects]]
   from = "/api/*"
   to = "https://cognito-backend-xlyd.onrender.com/api/:splat"

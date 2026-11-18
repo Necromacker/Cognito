@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: cognito-backend
+    name: cognito-backend-xlyd
     runtime: node
     plan: free
     buildCommand: npm install && cd server && npm install

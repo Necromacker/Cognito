@@ -1,4 +1,4 @@
 # Cognito Netlify redirect rules
-/api/*  https://cognito-backend.onrender.com/api/:splat  200!
-/uploads/*  https://cognito-backend.onrender.com/uploads/:splat  200!
+/api/*  https://cognito-backend-xlyd.onrender.com/api/:splat  200!
+/uploads/*  https://cognito-backend-xlyd.onrender.com/uploads/:splat  200!
 /*  /index.html  200
