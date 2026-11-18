@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
-import { useLanguage } from '../../../context/LanguageContext';
 import { useTextToSpeech } from '../../../hooks/useTextToSpeech';
 import ProgressBar from '../../../components/ProgressBar/ProgressBar';
 import StarRating from '../../../components/StarRating/StarRating';
 import HelpButton from '../../../components/HelpButton/HelpButton';
 import api from '../../../api';
 
-// Import individual game views
+// Game views
 import WhoIsThis from '../WhoIsThis/WhoIsThis';
 import WhoseVoice from '../WhoseVoice/WhoseVoice';
 import NameToFace from '../NameToFace/NameToFace';
@@ -29,7 +28,6 @@ import './GameSession.css';
 export default function GameSession() {
   const { gameType } = useParams();
   const { user } = useAuth();
-  const { t } = useLanguage();
   const navigate = useNavigate();
   const { speak } = useTextToSpeech();
 
@@ -40,8 +38,7 @@ export default function GameSession() {
   const [hintsUsed, setHintsUsed] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
-  const [showBreakPrompt, setShowBreakPrompt] = useState(false);
-  const [feedback, setFeedback] = useState(null); // { isCorrect, message }
+  const [feedback, setFeedback] = useState(null);
   const [showHint, setShowHint] = useState(false);
 
   const startTimeRef = useRef(Date.now());
@@ -49,34 +46,26 @@ export default function GameSession() {
 
   const patientId = user?.patientProfileId || user?.id;
 
-  // Initialize session and fetch questions
   useEffect(() => {
     if (patientId && gameType) {
       setLoading(true);
 
-      // Start session in backend
       api.post('/games/session', {
         patientId,
         gameType,
         difficulty: 1
-      }).then(res => {
-        setSessionId(res.data.sessionId);
-      }).catch(() => {});
+      }).then(res => setSessionId(res.data.sessionId)).catch(() => {});
 
-      // Fetch questions
       api.get(`/games/questions/${gameType}/${patientId}`)
         .then(res => {
           const qList = res.data.questions || [];
           setQuestions(qList);
           if (qList.length > 0) {
-            // Speak first question prompt
-            const initialPrompt = qList[0].prompt || qList[0].title || 'Take your time and enjoy.';
-            speak(initialPrompt);
+            const prompt = qList[0].prompt || qList[0].title || 'Take your time.';
+            speak(prompt);
           }
         })
-        .catch(err => {
-          console.error('Failed to load questions:', err);
-        })
+        .catch(console.error)
         .finally(() => {
           setLoading(false);
           questionStartTimeRef.current = Date.now();
@@ -84,20 +73,11 @@ export default function GameSession() {
     }
   }, [patientId, gameType]);
 
-  // Gentle break timer (after 7 minutes)
-  useEffect(() => {
-    const breakTimer = setTimeout(() => {
-      setShowBreakPrompt(true);
-    }, 7 * 60 * 1000);
-    return () => clearTimeout(breakTimer);
-  }, []);
-
   const currentQuestion = questions[currentIndex];
 
   const handleAnswer = async (isCorrect, answerGiven) => {
     const responseTimeMs = Date.now() - questionStartTimeRef.current;
 
-    // Record attempt to backend
     if (sessionId) {
       api.post('/games/attempt', {
         sessionId,
@@ -112,30 +92,21 @@ export default function GameSession() {
 
     if (isCorrect) {
       setCorrectCount(prev => prev + 1);
-      const praise = t('gentle_correct');
-      setFeedback({
-        isCorrect: true,
-        message: praise
-      });
-      speak(praise);
+      const msg = 'Wonderful! You remembered.';
+      setFeedback({ isCorrect: true, message: msg });
+      speak(msg);
     } else {
-      // Gentle encouragement rule: never say "wrong", reveal kindly
-      const gentleMsg = `${t('gentle_try')} ${currentQuestion.correctAnswer || ''}`;
-      setFeedback({
-        isCorrect: false,
-        message: gentleMsg
-      });
-      speak(gentleMsg);
+      const msg = `Nice try! The answer is: ${currentQuestion.correctAnswer || ''}`;
+      setFeedback({ isCorrect: false, message: msg });
+      speak(msg);
     }
 
-    // Advance after gentle delay
     setTimeout(() => {
       setFeedback(null);
       setShowHint(false);
       if (currentIndex + 1 < questions.length) {
         setCurrentIndex(prev => prev + 1);
         questionStartTimeRef.current = Date.now();
-        // Read next question
         const nextQ = questions[currentIndex + 1];
         if (nextQ) {
           const nextPrompt = nextQ.prompt || nextQ.title || 'Look closely.';
@@ -144,7 +115,7 @@ export default function GameSession() {
       } else {
         finishSession();
       }
-    }, 2800);
+    }, 2400);
   };
 
   const finishSession = () => {
@@ -165,31 +136,19 @@ export default function GameSession() {
   const handleRequestHint = () => {
     setHintsUsed(prev => prev + 1);
     setShowHint(true);
-    if (currentQuestion?.hint) {
-      speak(currentQuestion.hint);
-    }
+    if (currentQuestion?.hint) speak(currentQuestion.hint);
   };
 
-  if (loading) {
-    return (
-      <div className="game-loading-screen">
-        <div className="game-loading__spinner"></div>
-        <h2 className="game-loading__text">Preparing your gentle game...</h2>
-      </div>
-    );
-  }
+  if (loading) return <div className="game-loading-strip">Preparing module...</div>;
 
-  // Completion Screen
   if (isCompleted) {
     const finalStars = Math.max(3, Math.min(5, correctCount + 1));
     return (
       <div className="game-complete-screen">
-        <div className="game-complete-card">
-          <div className="game-complete__icon">🎉</div>
-          <h1 className="game-complete__title">Wonderful Play!</h1>
-          <p className="game-complete__message">
-            You did an outstanding job today. Your mind is shining bright!
-          </p>
+        <div className="game-complete-card card">
+          <div className="badge badge--green" style={{ marginBottom: '8px' }}>SESSION COMPLETE</div>
+          <h1 className="game-complete__title">WONDERFUL PLAY</h1>
+          <p className="game-complete__message">Your mind is sharp and calm.</p>
 
           <div className="game-complete__stars">
             <StarRating stars={finalStars} maxStars={5} showStreak={true} streak={2} />
@@ -198,17 +157,17 @@ export default function GameSession() {
           <div className="game-complete__actions">
             <button
               type="button"
-              className="game-btn game-btn--primary"
+              className="btn btn--primary"
               onClick={() => navigate('/patient/games')}
             >
-              Play Another Game ▶
+              PLAY ANOTHER ▶
             </button>
             <button
               type="button"
-              className="game-btn game-btn--outline"
+              className="btn btn--outline"
               onClick={() => navigate('/patient')}
             >
-              {t('back_home')} 🏠
+              RETURN HOME
             </button>
           </div>
         </div>
@@ -217,25 +176,9 @@ export default function GameSession() {
     );
   }
 
-  // Render the specific game component
   const renderGameComponent = () => {
-    if (!currentQuestion) {
-      return (
-        <div className="game-empty-state">
-          <p>No questions available for this game yet. Please ask your caretaker to add pictures!</p>
-          <button className="game-btn game-btn--outline" onClick={() => navigate('/patient')}>
-            Return Home
-          </button>
-        </div>
-      );
-    }
-
-    const gameProps = {
-      question: currentQuestion,
-      onAnswer: handleAnswer,
-      showHint,
-      speak
-    };
+    if (!currentQuestion) return <div>No items in this module yet.</div>;
+    const gameProps = { question: currentQuestion, onAnswer: handleAnswer, showHint, speak };
 
     switch (gameType) {
       case 'who-is-this': return <WhoIsThis {...gameProps} />;
@@ -260,73 +203,47 @@ export default function GameSession() {
     <div className="game-session-page">
       <div className="game-session-container">
         
-        {/* Top Bar: Back & Progress */}
-        <div className="game-session__topbar">
+        {/* Top Control Bar */}
+        <div className="session-top-controls">
           <button
             type="button"
-            className="game-session__exit-btn"
+            className="session-ctrl-btn"
             onClick={() => navigate('/patient/games')}
-            aria-label="Exit game"
           >
-            ✕ Exit
+            EXIT
           </button>
 
-          <div className="game-session__progress-wrap">
-            <ProgressBar
-              current={currentIndex + 1}
-              total={Math.max(1, questions.length)}
-              label={`Step ${currentIndex + 1} of ${Math.max(1, questions.length)}`}
-            />
+          <div className="session-progress-strip">
+            <span className="session-step-label">
+              QUESTION {currentIndex + 1} OF {Math.max(1, questions.length)}
+            </span>
+            <ProgressBar current={currentIndex + 1} total={Math.max(1, questions.length)} />
           </div>
 
           <button
             type="button"
-            className="game-session__hint-btn"
+            className="session-ctrl-btn session-ctrl-btn--hint"
             onClick={handleRequestHint}
-            aria-label="Need a gentle hint"
           >
-            💡 Hint
+            HINT
           </button>
         </div>
 
-        {/* Gentle Break Prompt Modal */}
-        {showBreakPrompt && (
-          <div className="gentle-break-banner" role="alert">
-            <span className="gentle-break__icon">☕</span>
-            <div className="gentle-break__body">
-              <strong>{t('take_break')}</strong>
-              <p>{t('break_message')}</p>
-            </div>
-            <button
-              type="button"
-              className="gentle-break__close"
-              onClick={() => setShowBreakPrompt(false)}
-            >
-              I am doing great, continue!
-            </button>
-          </div>
-        )}
-
-        {/* Active Game Component */}
-        <div className="game-active-area">
+        {/* Active Game */}
+        <div className="session-active-card card">
           {renderGameComponent()}
         </div>
 
-        {/* Feedback Alert Overlay (Gentle Encouragement - Never Red) */}
+        {/* Clean Feedback */}
         {feedback && (
-          <div className={`game-feedback-banner ${feedback.isCorrect ? 'game-feedback--correct' : 'game-feedback--gentle'}`}>
-            <span className="game-feedback__icon">
-              {feedback.isCorrect ? '🌟' : '💛'}
-            </span>
-            <span className="game-feedback__text">{feedback.message}</span>
+          <div className={`session-feedback-strip ${feedback.isCorrect ? 'session-feedback--correct' : 'session-feedback--gentle'}`}>
+            {feedback.message}
           </div>
         )}
 
-        {/* Always visible help button */}
         <HelpButton />
 
       </div>
     </div>
   );
 }
-

@@ -4,12 +4,3 @@
   align-items: center;
   text-align: center;
 }
-.orientation-choice-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-md);
-}
-.orientation-icon {
-  font-size: 36px;
-}

@@ -6,16 +6,15 @@ export default function PlaceRecognition({ question, onAnswer, showHint }) {
 
   return (
     <div className="place-game">
-      <h2 className="game-prompt">Which special place is this?</h2>
+      <div className="game-card-label">LOCATION RECOGNITION</div>
+      <h2 className="game-prompt">Which place is this?</h2>
 
-      <div className="place-photo-wrap">
+      <div className="place-photo-frame">
         <img src={photoUrl} alt="Place" className="place-photo" />
       </div>
 
       {showHint && hint && (
-        <div className="game-hint-box" role="status">
-          💡 {hint}
-        </div>
+        <div className="game-hint-tag">HINT: {hint}</div>
       )}
 
       <div className="game-options-container">
@@ -23,7 +22,7 @@ export default function PlaceRecognition({ question, onAnswer, showHint }) {
           <button
             key={idx}
             type="button"
-            className="patient-choice-btn"
+            className="game-choice-btn"
             onClick={() => onAnswer(placeName === correctAnswer, placeName)}
           >
             {placeName}
@@ -33,4 +32,3 @@ export default function PlaceRecognition({ question, onAnswer, showHint }) {
     </div>
   );
 }
-

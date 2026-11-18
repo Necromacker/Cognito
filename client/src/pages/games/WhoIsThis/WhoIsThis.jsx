@@ -6,25 +6,25 @@ export default function WhoIsThis({ question, onAnswer, showHint }) {
 
   return (
     <div className="who-is-this-game">
-      <h2 className="game-prompt">Who is this lovely person?</h2>
+      <div className="game-card-label">FACE RECALL</div>
+      <h2 className="game-prompt">Who is this person?</h2>
 
-      <div className="who-is-this__photo-container">
-        <img src={photoUrl} alt="Family member" className="who-is-this__photo" />
+      <div className="who-photo-frame">
+        <img src={photoUrl} alt="Person" className="who-photo" />
       </div>
 
       {showHint && hint && (
-        <div className="game-hint-box" role="status">
-          💡 {hint}
+        <div className="game-hint-tag">
+          HINT: {hint}
         </div>
       )}
 
-      {/* Max 3 Options */}
       <div className="game-options-container">
         {options.map((name, idx) => (
           <button
             key={idx}
             type="button"
-            className="patient-choice-btn"
+            className="game-choice-btn"
             onClick={() => onAnswer(name === correctAnswer, name)}
           >
             {name}
@@ -34,4 +34,3 @@ export default function WhoIsThis({ question, onAnswer, showHint }) {
     </div>
   );
 }
-

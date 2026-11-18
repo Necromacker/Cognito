@@ -18,11 +18,14 @@ export default function SimpleSorting({ question, onAnswer }) {
 
   return (
     <div className="sorting-game">
+      <div className="game-card-label">CATEGORIZATION</div>
       <h2 className="game-prompt">Where does this belong?</h2>
+
       <div className="sorting-target-card">
-        <span className="sorting-item-icon">{currentItem.icon}</span>
+        <span className="sorting-item-tag">ITEM</span>
         <span className="sorting-item-name">{currentItem.name}</span>
       </div>
+
       <div className="sorting-buckets">
         <button type="button" className="sorting-bucket-btn" onClick={() => handleChoose(categoryA)}>
           {categoryA}

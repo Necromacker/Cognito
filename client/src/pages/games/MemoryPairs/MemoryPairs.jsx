@@ -1,8 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './MemoryPairs.css';
 
 export default function MemoryPairs({ question, onAnswer }) {
-  const [cards, setCards] = useState(question?.cards || []);
+  // Use clean retro geometric pixel symbols instead of emojis
+  const defaultCards = [
+    { id: 0, pairId: 0, symbol: '▲' },
+    { id: 1, pairId: 0, symbol: '▲' },
+    { id: 2, pairId: 1, symbol: '■' },
+    { id: 3, pairId: 1, symbol: '■' },
+    { id: 4, pairId: 2, symbol: '●' },
+    { id: 5, pairId: 2, symbol: '●' }
+  ];
+
+  const [cards] = useState(defaultCards);
   const [flipped, setFlipped] = useState([]);
   const [matched, setMatched] = useState([]);
 
@@ -20,19 +30,19 @@ export default function MemoryPairs({ question, onAnswer }) {
         const nextMatched = [...matched, first.pairId];
         setMatched(nextMatched);
         setFlipped([]);
-        if (nextMatched.length === (question.pairCount || 3)) {
-          setTimeout(() => onAnswer(true, 'Matched all pairs'), 1000);
+        if (nextMatched.length === 3) {
+          setTimeout(() => onAnswer(true, 'Matched all pairs'), 800);
         }
       } else {
-        setTimeout(() => setFlipped([]), 1200);
+        setTimeout(() => setFlipped([]), 1000);
       }
     }
   };
 
   return (
     <div className="memory-pairs-game">
-      <h2 className="game-prompt">Find the matching friendly pairs</h2>
-      <p className="pairs-sub">Tap any two cards to reveal them:</p>
+      <div className="game-card-label">SYMBOL MATCHING</div>
+      <h2 className="game-prompt">Find matching pairs</h2>
 
       <div className="pairs-grid">
         {cards.map((c, idx) => {
@@ -44,7 +54,7 @@ export default function MemoryPairs({ question, onAnswer }) {
               className={`pair-card ${isFlipped ? 'pair-card--flipped' : ''}`}
               onClick={() => handleCardClick(idx)}
             >
-              {isFlipped ? c.symbol : '❓'}
+              {isFlipped ? c.symbol : '?'}
             </button>
           );
         })}

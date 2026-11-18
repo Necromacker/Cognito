@@ -6,16 +6,15 @@ export default function RelationshipMatch({ question, onAnswer, showHint }) {
 
   return (
     <div className="relationship-game">
-      <h2 className="game-prompt">How is <span className="highlight-name">{name}</span> related to you?</h2>
+      <div className="game-card-label">RELATIONSHIP MATCH</div>
+      <h2 className="game-prompt">Who is <span className="highlight-tag">{name}</span> to you?</h2>
 
-      <div className="relationship-photo-wrap">
-        <img src={photoUrl} alt={name} className="relationship-photo" />
+      <div className="who-photo-frame">
+        <img src={photoUrl} alt={name} className="who-photo" />
       </div>
 
       {showHint && hint && (
-        <div className="game-hint-box" role="status">
-          💡 {hint}
-        </div>
+        <div className="game-hint-tag">HINT: {hint}</div>
       )}
 
       <div className="game-options-container">
@@ -23,7 +22,7 @@ export default function RelationshipMatch({ question, onAnswer, showHint }) {
           <button
             key={idx}
             type="button"
-            className="patient-choice-btn"
+            className="game-choice-btn"
             onClick={() => onAnswer(rel === correctAnswer, rel)}
           >
             {rel}
@@ -33,4 +32,3 @@ export default function RelationshipMatch({ question, onAnswer, showHint }) {
     </div>
   );
 }
-

@@ -22,34 +22,32 @@ export default function LifeTimeline({ question, onAnswer, showHint }) {
 
   return (
     <div className="timeline-game">
-      <h2 className="game-prompt">Arrange these life events from earlier to recent</h2>
-      <p className="timeline-sub">Tap the arrows to gently re-order:</p>
+      <div className="game-card-label">CHRONOLOGICAL ORDER</div>
+      <h2 className="game-prompt">Order from earlier to recent</h2>
 
       {showHint && hint && (
-        <div className="game-hint-box" role="status">
-          💡 {hint}
-        </div>
+        <div className="game-hint-tag">HINT: {hint}</div>
       )}
 
       <div className="timeline-cards-list">
         {orderedEvents.map((item, idx) => (
-          <div key={item.id} className="timeline-event-card">
+          <div key={item.id} className="timeline-row card">
             <span className="timeline-step-badge">{idx + 1}</span>
-            <div className="timeline-event__img-wrap">
-              <img src={item.photo_url} alt={item.title} className="timeline-event__img" />
+            <div className="timeline-img-box">
+              <img src={item.photo_url} alt={item.title} className="timeline-img" />
             </div>
-            <div className="timeline-event__text">
-              <h3 className="timeline-event__title">{item.title}</h3>
-              <p className="timeline-event__desc">{item.description}</p>
+            <div className="timeline-info">
+              <span className="timeline-title">{item.title}</span>
+              <span className="timeline-desc">{item.description}</span>
             </div>
             {idx > 0 && (
               <button
                 type="button"
-                className="timeline-move-btn"
+                className="btn btn--outline"
+                style={{ fontSize: '10px', minHeight: '30px', padding: '4px 8px' }}
                 onClick={() => moveUp(idx)}
-                aria-label="Move earlier"
               >
-                ▲ Move Earlier
+                MOVE UP ▲
               </button>
             )}
           </div>
@@ -58,12 +56,12 @@ export default function LifeTimeline({ question, onAnswer, showHint }) {
 
       <button
         type="button"
-        className="timeline-confirm-btn"
+        className="btn btn--primary"
+        style={{ marginTop: '12px' }}
         onClick={handleConfirm}
       >
-        That Looks Wonderful! ➔
+        SUBMIT TIMELINE ➔
       </button>
     </div>
   );
 }
-
