@@ -11,8 +11,6 @@ export default function LanguageSwitcher() {
         type="button"
         className={`lang-btn ${language === 'en' ? 'lang-btn--active' : ''}`}
         onClick={() => switchLanguage('en')}
-        aria-checked={language === 'en'}
-        role="radio"
       >
         EN
       </button>
@@ -20,21 +18,16 @@ export default function LanguageSwitcher() {
         type="button"
         className={`lang-btn ${language === 'hi' ? 'lang-btn--active' : ''}`}
         onClick={() => switchLanguage('hi')}
-        aria-checked={language === 'hi'}
-        role="radio"
       >
-        हिन्दी
+        HI
       </button>
       <button
         type="button"
         className={`lang-btn ${language === 'mr' ? 'lang-btn--active' : ''}`}
         onClick={() => switchLanguage('mr')}
-        aria-checked={language === 'mr'}
-        role="radio"
       >
-        मराठी
+        MR
       </button>
     </div>
   );
 }
-

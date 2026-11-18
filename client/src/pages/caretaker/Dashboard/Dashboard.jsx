@@ -15,7 +15,6 @@ export default function Dashboard() {
   const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Load patients list
   useEffect(() => {
     api.get('/patients')
       .then(res => {
@@ -31,7 +30,6 @@ export default function Dashboard() {
       .catch(console.error);
   }, []);
 
-  // Load stats and chart for selected patient
   useEffect(() => {
     if (selectedPatientId) {
       setLoading(true);
@@ -56,52 +54,44 @@ export default function Dashboard() {
     <div className="caretaker-dashboard-page">
       <div className="dashboard-container">
         
-        {/* Top Header */}
-        <div className="dashboard-header">
-          <div>
-            <div className="label-caps">Caretaker Overview</div>
-            <h1 className="dashboard-title">Family & Care Companion</h1>
+        {/* Top Bar with Patient Pill Selector */}
+        <div className="dashboard-top-bar">
+          <div className="dashboard-patient-chips">
+            {patients.map(p => (
+              <button
+                key={p.id}
+                type="button"
+                className={`patient-tab-chip ${selectedPatientId === String(p.id) ? 'patient-tab-chip--active' : ''}`}
+                onClick={() => setSelectedPatientId(String(p.id))}
+              >
+                {p.name}
+              </button>
+            ))}
           </div>
 
-          {/* Patient Selector */}
-          {patients.length > 0 && (
-            <div className="patient-select-wrap">
-              <label className="label-caps">Active Patient:</label>
-              <select
-                className="dashboard-select"
-                value={selectedPatientId}
-                onChange={(e) => setSelectedPatientId(e.target.value)}
-              >
-                {patients.map(p => (
-                  <option key={p.id} value={p.id}>
-                    {p.name} (Age {p.age || '—'}, {p.stage ? p.stage.toUpperCase() : 'EARLY'})
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
+          <div className="dashboard-quick-actions">
+            <button type="button" className="action-pill-btn" onClick={() => navigate('/caretaker/content')}>
+              CONTENT
+            </button>
+            <button type="button" className="action-pill-btn" onClick={() => navigate('/caretaker/dailylog')}>
+              DAILY LOG
+            </button>
+            <button type="button" className="action-pill-btn" onClick={() => navigate('/caretaker/reminders')}>
+              REMINDERS
+            </button>
+          </div>
         </div>
 
         {/* Alerts Feed */}
         {alerts.length > 0 && (
-          <div className="alerts-feed-card">
-            <div className="alerts-feed__header">
-              <span className="alerts-feed__title">⚠️ Active Caretaker Alerts ({alerts.length})</span>
-            </div>
-            <div className="alerts-list">
+          <div className="alerts-strip">
+            <span className="alert-strip-badge">ALERT</span>
+            <div className="alerts-items">
               {alerts.map(a => (
-                <div key={a.id} className="alert-item">
-                  <div className="alert-item__content">
-                    <span className="alert-badge">{a.type.toUpperCase()}</span>
-                    <span className="alert-message">{a.message}</span>
-                    <span className="alert-time">{a.created_at}</span>
-                  </div>
-                  <button
-                    type="button"
-                    className="alert-ack-btn"
-                    onClick={() => handleDismissAlert(a.id)}
-                  >
-                    Acknowledge ✓
+                <div key={a.id} className="alert-item-row">
+                  <span className="alert-item-msg">{a.message}</span>
+                  <button type="button" className="alert-ack-btn" onClick={() => handleDismissAlert(a.id)}>
+                    ACK
                   </button>
                 </div>
               ))}
@@ -109,84 +99,58 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* 4 Stat Cards Styled Exactly like Reference Score/Best Grid */}
-        <div className="stats-metric-grid">
-          <div className="metric-card">
-            <span className="metric-card__label">OVERALL ACCURACY</span>
-            <div className="metric-card__value metric-card__value--gold">
+        {/* 4 Score Metric Cards directly matching Pixel Picnic Score Box */}
+        <div className="metrics-pixel-grid">
+          <div className="pixel-stat-card card">
+            <span className="pixel-stat-label">ACCURACY</span>
+            <div className="pixel-stat-value pixel-stat-value--pink">
               {stats?.accuracy || 0}%
             </div>
-            <span className="metric-card__sub">{stats?.totalAttempts || 0} total question attempts</span>
+            <span className="pixel-stat-sub">{stats?.totalAttempts || 0} attempts</span>
           </div>
 
-          <div className="metric-card">
-            <span className="metric-card__label">RESPONSE TIME</span>
-            <div className="metric-card__value">
+          <div className="pixel-stat-card card">
+            <span className="pixel-stat-label">AVG RESPONSE</span>
+            <div className="pixel-stat-value">
               {stats?.avgResponseTimeSec || 0}s
             </div>
-            <span className="metric-card__sub">Average time per gentle question</span>
+            <span className="pixel-stat-sub">per question</span>
           </div>
 
-          <div className="metric-card">
-            <span className="metric-card__label">DAY STREAK</span>
-            <div className="metric-card__value metric-card__value--pink">
-              {stats?.streak || 1} 🔥
+          <div className="pixel-stat-card card">
+            <span className="pixel-stat-label">STREAK</span>
+            <div className="pixel-stat-value pixel-stat-value--gold">
+              {stats?.streak || 1}
             </div>
-            <span className="metric-card__sub">Consistent engagement days</span>
+            <span className="pixel-stat-sub">consecutive days</span>
           </div>
 
-          <div className="metric-card">
-            <span className="metric-card__label">HINTS USED</span>
-            <div className="metric-card__value metric-card__value--green">
+          <div className="pixel-stat-card card">
+            <span className="pixel-stat-label">HINTS</span>
+            <div className="pixel-stat-value pixel-stat-value--green">
               {stats?.totalHints || 0}
             </div>
-            <span className="metric-card__sub">Gentle memory supports given</span>
+            <span className="pixel-stat-sub">assists given</span>
           </div>
         </div>
 
-        {/* Quick Action Navigation Buttons */}
-        <div className="dashboard-quick-actions">
-          <button
-            type="button"
-            className="quick-action-btn"
-            onClick={() => navigate('/caretaker/content')}
-          >
-            📸 Content Library (People & Photos)
-          </button>
-          <button
-            type="button"
-            className="quick-action-btn"
-            onClick={() => navigate('/caretaker/dailylog')}
-          >
-            📝 Log Sleep, Mood & Meds
-          </button>
-          <button
-            type="button"
-            className="quick-action-btn"
-            onClick={() => navigate('/caretaker/reminders')}
-          >
-            ⏰ Manage Reminders
-          </button>
-        </div>
-
-        {/* Trends & Recent Sessions Grid */}
+        {/* Panels */}
         <div className="dashboard-panels-grid">
-          {/* Accuracy Trend SVG Chart */}
-          <div className="panel-card">
-            <div className="label-caps">Cognitive Trend</div>
-            <h3 className="panel-title">Accuracy Over Last 7 Days</h3>
-            
+          {/* Trend Chart */}
+          <div className="panel-box card">
+            <div className="card-header-bar">
+              <span className="card-header-title">7-DAY ACCURACY TREND</span>
+            </div>
             <div className="chart-bars-wrap">
               {chartData.length === 0 ? (
-                <p className="no-data-msg">No session data recorded yet this week.</p>
+                <p className="no-data-msg">No activity recorded this week</p>
               ) : (
                 chartData.map((d, i) => (
                   <div key={i} className="chart-bar-col">
                     <div className="chart-bar-track">
                       <div
                         className="chart-bar-fill"
-                        style={{ height: `${Math.max(10, d.accuracy)}%` }}
-                        title={`${d.date}: ${d.accuracy}%`}
+                        style={{ height: `${Math.max(12, d.accuracy)}%` }}
                       ></div>
                     </div>
                     <span className="chart-bar-pct">{d.accuracy}%</span>
@@ -197,26 +161,24 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Recent Game Sessions */}
-          <div className="panel-card">
-            <div className="label-caps">Activity History</div>
-            <h3 className="panel-title">Recent Game Sessions</h3>
-
+          {/* Recent History */}
+          <div className="panel-box card">
+            <div className="card-header-bar">
+              <span className="card-header-title">RECENT SESSIONS</span>
+            </div>
             <div className="recent-sessions-list">
               {stats?.recentSessions?.length === 0 ? (
-                <p className="no-data-msg">No games played yet. Invite patient to play!</p>
+                <p className="no-data-msg">No sessions yet</p>
               ) : (
                 stats?.recentSessions?.map(s => (
                   <div key={s.id} className="session-history-item">
-                    <div className="session-item__left">
+                    <div>
                       <span className="session-game-badge">{s.game_type}</span>
-                      <span className="session-time">{s.started_at}</span>
+                      <span className="session-time">{s.started_at?.slice(0, 16)}</span>
                     </div>
-                    <div className="session-item__right">
-                      <span className="session-score">
-                        {s.correct_answers} / {s.total_questions} correct
-                      </span>
-                    </div>
+                    <span className="session-score">
+                      {s.correct_answers}/{s.total_questions}
+                    </span>
                   </div>
                 ))
               )}

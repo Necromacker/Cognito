@@ -1,0 +1,96 @@
+.admin-page {
+  min-height: calc(100vh - 80px);
+  padding: var(--space-xl) var(--space-lg);
+  background-color: var(--color-bg-page);
+}
+.admin-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.admin-title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-black);
+  color: #ffffff;
+  margin-bottom: var(--space-xl);
+}
+.admin-tabs {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xl);
+}
+.admin-tab {
+  background-color: var(--color-bg-card);
+  border: 2px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+.admin-tab--active {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #ffffff;
+}
+.admin-card {
+  background-color: var(--color-bg-card);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  overflow-x: auto;
+}
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.admin-table th, .admin-table td {
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+.admin-table th {
+  color: var(--color-text-muted);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+.role-badge {
+  background-color: var(--color-accent-bg);
+  color: var(--color-accent);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: bold;
+}
+.verify-btn {
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+}
+.verify-btn--verified {
+  background-color: var(--color-secondary-bg);
+  border: 1px solid var(--color-secondary);
+  color: var(--color-secondary);
+}
+.verify-btn--pending {
+  background-color: var(--color-danger-bg);
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
+}
+.toggle-active-btn {
+  background-color: var(--color-bg-medium);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.audit-action-tag {
+  color: var(--color-primary);
+  font-weight: bold;
+  font-family: monospace;
+}

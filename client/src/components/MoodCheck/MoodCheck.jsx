@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import api from '../../api';
-import { useLanguage } from '../../context/LanguageContext';
 import './MoodCheck.css';
 
 export default function MoodCheck({ patientId, onMoodSelected }) {
-  const { t } = useLanguage();
   const [selectedMood, setSelectedMood] = useState(null);
   const [savedMessage, setSavedMessage] = useState(false);
 
@@ -29,47 +27,46 @@ export default function MoodCheck({ patientId, onMoodSelected }) {
   };
 
   return (
-    <div className="mood-check-card" role="region" aria-label="Daily mood check">
-      <h2 className="mood-check__title">{t('mood_question')}</h2>
+    <div className="mood-check-card card" role="region" aria-label="Daily mood check">
+      <div className="mood-check__top">
+        <span className="label-caps">DAILY CHECK</span>
+        <span className="mood-check__title">HOW ARE YOU FEELING TODAY?</span>
+      </div>
       
       <div className="mood-check__options">
         <button
           type="button"
           className={`mood-btn ${selectedMood === 'happy' ? 'mood-btn--selected' : ''}`}
           onClick={() => handleSelect('happy')}
-          aria-label={t('mood_happy')}
         >
-          <span className="mood-btn__emoji" role="img" aria-hidden="true">😊</span>
-          <span className="mood-btn__label">{t('mood_happy')}</span>
+          <span className="mood-btn__indicator mood-btn__indicator--green"></span>
+          <span className="mood-btn__label">GOOD / CHEERFUL</span>
         </button>
 
         <button
           type="button"
           className={`mood-btn ${selectedMood === 'neutral' ? 'mood-btn--selected' : ''}`}
           onClick={() => handleSelect('neutral')}
-          aria-label={t('mood_neutral')}
         >
-          <span className="mood-btn__emoji" role="img" aria-hidden="true">😐</span>
-          <span className="mood-btn__label">{t('mood_neutral')}</span>
+          <span className="mood-btn__indicator mood-btn__indicator--yellow"></span>
+          <span className="mood-btn__label">PEACEFUL / CALM</span>
         </button>
 
         <button
           type="button"
           className={`mood-btn ${selectedMood === 'sad' ? 'mood-btn--selected' : ''}`}
           onClick={() => handleSelect('sad')}
-          aria-label={t('mood_sad')}
         >
-          <span className="mood-btn__emoji" role="img" aria-hidden="true">😢</span>
-          <span className="mood-btn__label">{t('mood_sad')}</span>
+          <span className="mood-btn__indicator mood-btn__indicator--pink"></span>
+          <span className="mood-btn__label">TIRED / A BIT LOW</span>
         </button>
       </div>
 
       {savedMessage && (
         <div className="mood-check__feedback" role="status">
-          ✨ Thank you for sharing how you feel. We are here with you!
+          ✓ Mood recorded gently.
         </div>
       )}
     </div>
   );
 }
-

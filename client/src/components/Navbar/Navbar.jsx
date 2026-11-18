@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -10,7 +10,6 @@ export default function Navbar() {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
-  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = async () => {
     await logout();
@@ -20,66 +19,66 @@ export default function Navbar() {
   const isPatient = user && user.role === 'patient';
 
   return (
-    <header className={`navbar-header ${isPatient ? 'navbar-header--patient' : ''}`}>
-      <div className="navbar-container">
-        {/* Brand Logo */}
-        <Link to={user ? (isPatient ? '/patient' : (user.role === 'doctor' ? '/doctor' : (user.role === 'admin' ? '/admin' : '/caretaker'))) : '/'} className="navbar-brand">
-          <span className="navbar-brand__icon" role="img" aria-label="brain">🧠</span>
-          <span className="navbar-brand__text">COGNITO</span>
-          <span className="navbar-brand__badge">CARE</span>
-        </Link>
+    <div className="navbar-wrapper">
+      {/* Reference Top Window Bar with dots & URL */}
+      <div className="window-topbar">
+        <div className="window-dots">
+          <span className="window-dot window-dot--orange"></span>
+          <span className="window-dot window-dot--yellow"></span>
+          <span className="window-dot window-dot--green"></span>
+        </div>
+        <div className="window-url-box">
+          COGNITO.CARE
+        </div>
+        <div className="window-badge-live">
+          SYSTEM ACTIVE
+        </div>
+      </div>
 
-        {/* Mobile toggle button */}
-        {user && !isPatient && (
-          <button
-            type="button"
-            className="navbar-mobile-toggle"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle navigation menu"
-          >
-            ☰
-          </button>
-        )}
+      {/* Retro Dark Navbar Bar matching Reference */}
+      <header className="navbar-floating-bar">
+        <div className="navbar-left">
+          <Link to={user ? (isPatient ? '/patient' : (user.role === 'doctor' ? '/doctor' : (user.role === 'admin' ? '/admin' : '/caretaker'))) : '/'} className="navbar-brand">
+            <span className="navbar-pixel-icon">::</span>
+            <span className="navbar-brand__text">COGNITO</span>
+          </Link>
+        </div>
 
-        {/* Nav Links */}
         {user && (
-          <nav className={`navbar-nav ${menuOpen ? 'navbar-nav--open' : ''}`}>
+          <nav className="navbar-center-links">
             {isPatient ? (
-              <div className="navbar-patient-links">
-                <Link
-                  to="/patient"
-                  className={`navbar-patient-link ${location.pathname === '/patient' ? 'navbar-patient-link--active' : ''}`}
-                >
-                  🏠 {t('back_home')}
+              <>
+                <Link to="/patient" className={`nav-link ${location.pathname === '/patient' ? 'nav-link--active' : ''}`}>
+                  HOME
                 </Link>
-                <Link
-                  to="/patient/memories"
-                  className={`navbar-patient-link ${location.pathname === '/patient/memories' ? 'navbar-patient-link--active' : ''}`}
-                >
-                  🖼️ {t('my_memories')}
+                <Link to="/patient/games" className={`nav-link ${location.pathname.startsWith('/patient/games') ? 'nav-link--active' : ''}`}>
+                  PLAY
                 </Link>
-              </div>
+                <Link to="/patient/memories" className={`nav-link ${location.pathname === '/patient/memories' ? 'nav-link--active' : ''}`}>
+                  MEMORIES
+                </Link>
+              </>
             ) : (
-              <div className="navbar-role-links">
+              <>
                 {user.role === 'caretaker' && (
                   <>
                     <Link to="/caretaker" className={`nav-link ${location.pathname === '/caretaker' ? 'nav-link--active' : ''}`}>
-                      {t('dashboard')}
+                      DASHBOARD
                     </Link>
                     <Link to="/caretaker/patients" className={`nav-link ${location.pathname.startsWith('/caretaker/patients') ? 'nav-link--active' : ''}`}>
-                      Patients
+                      PATIENTS
                     </Link>
                     <Link to="/caretaker/content" className={`nav-link ${location.pathname.startsWith('/caretaker/content') ? 'nav-link--active' : ''}`}>
-                      {t('content_library')}
+                      LIBRARY
                     </Link>
                     <Link to="/caretaker/dailylog" className={`nav-link ${location.pathname.startsWith('/caretaker/dailylog') ? 'nav-link--active' : ''}`}>
-                      {t('daily_log')}
+                      DAILY LOG
                     </Link>
                     <Link to="/caretaker/reminders" className={`nav-link ${location.pathname.startsWith('/caretaker/reminders') ? 'nav-link--active' : ''}`}>
-                      {t('reminders')}
+                      REMINDERS
                     </Link>
                     <Link to="/caretaker/settings" className={`nav-link ${location.pathname.startsWith('/caretaker/settings') ? 'nav-link--active' : ''}`}>
-                      {t('settings')}
+                      SETTINGS
                     </Link>
                   </>
                 )}
@@ -87,7 +86,7 @@ export default function Navbar() {
                 {user.role === 'doctor' && (
                   <>
                     <Link to="/doctor" className={`nav-link ${location.pathname === '/doctor' ? 'nav-link--active' : ''}`}>
-                      {t('doctor_dashboard')}
+                      PATIENTS
                     </Link>
                   </>
                 )}
@@ -95,33 +94,28 @@ export default function Navbar() {
                 {user.role === 'admin' && (
                   <>
                     <Link to="/admin" className={`nav-link ${location.pathname === '/admin' ? 'nav-link--active' : ''}`}>
-                      {t('admin_panel')}
+                      ADMIN
                     </Link>
                   </>
                 )}
-              </div>
+              </>
             )}
-
-            <div className="navbar-actions">
-              <LanguageSwitcher />
-              <button
-                type="button"
-                className={`navbar-logout-btn ${isPatient ? 'navbar-logout-btn--patient' : ''}`}
-                onClick={handleLogout}
-              >
-                {t('logout')}
-              </button>
-            </div>
           </nav>
         )}
 
-        {!user && (
-          <div className="navbar-actions">
-            <LanguageSwitcher />
-          </div>
-        )}
-      </div>
-    </header>
+        <div className="navbar-right">
+          <LanguageSwitcher />
+          {user ? (
+            <button type="button" className="navbar-pink-btn" onClick={handleLogout}>
+              SIGN OUT
+            </button>
+          ) : (
+            <Link to="/" className="navbar-pink-btn">
+              SIGN IN
+            </Link>
+          )}
+        </div>
+      </header>
+    </div>
   );
 }
-

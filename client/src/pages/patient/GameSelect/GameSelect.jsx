@@ -1,38 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
-import { useLanguage } from '../../../context/LanguageContext';
 import HelpButton from '../../../components/HelpButton/HelpButton';
-import GameCard from '../../../components/GameCard/GameCard';
-import api from '../../../api';
 import './GameSelect.css';
 
 export default function GameSelect() {
   const { user } = useAuth();
-  const { t } = useLanguage();
   const navigate = useNavigate();
-  const [filter, setFilter] = useState('all'); // 'all', 'family', 'brain'
-
-  const patientId = user?.patientProfileId || user?.id;
+  const [filter, setFilter] = useState('all');
 
   const games = [
-    // Personalised Games (Family & Content)
-    { id: 'who-is-this', category: 'family', icon: '👤', title: 'Who Is This?', desc: 'See a photo of a family member and recall their name.' },
-    { id: 'whose-voice', category: 'family', icon: '🎙️', title: 'Whose Voice Is This?', desc: 'Listen to a voice clip and match who is speaking.' },
-    { id: 'name-to-face', category: 'family', icon: '🔍', title: 'Name to Face', desc: 'Read a loved one’s name and pick their picture.' },
-    { id: 'relationship-match', category: 'family', icon: '❤️', title: 'Family Relationship', desc: 'Remember whether someone is your daughter, son, or friend.' },
-    { id: 'place-recognition', category: 'family', icon: '🏡', title: 'Place Recognition', desc: 'Recognise beloved homes, vacation spots, and towns.' },
-    { id: 'life-timeline', category: 'family', icon: '⏳', title: 'Life Timeline', desc: 'Arrange milestone family photos in chronological order.' },
-    { id: 'familiar-songs', category: 'family', icon: '🎵', title: 'Familiar Songs', desc: 'Listen to a nostalgic melody and recall the song title.' },
+    // Personalised
+    { id: 'who-is-this', category: 'family', tag: 'PHOTO', title: 'WHO IS THIS?', desc: 'Recall family member names from photos.' },
+    { id: 'whose-voice', category: 'family', tag: 'AUDIO', title: 'WHOSE VOICE?', desc: 'Listen to voice clips and match the speaker.' },
+    { id: 'name-to-face', category: 'family', tag: 'MATCH', title: 'NAME TO FACE', desc: 'Read a loved one’s name and choose their picture.' },
+    { id: 'relationship-match', category: 'family', tag: 'FAMILY', title: 'RELATIONSHIP', desc: 'Identify whether someone is daughter, son, or friend.' },
+    { id: 'place-recognition', category: 'family', tag: 'PLACE', title: 'RECOGNISE PLACES', desc: 'Recall familiar homes, holiday towns, and gardens.' },
+    { id: 'life-timeline', category: 'family', tag: 'CHRONO', title: 'LIFE TIMELINE', desc: 'Order milestone memories by year.' },
+    { id: 'familiar-songs', category: 'family', tag: 'MUSIC', title: 'FAMILIAR SONGS', desc: 'Listen to nostalgic melodies and recall the title.' },
 
-    // General Brain & Comfort Games
-    { id: 'memory-pairs', category: 'brain', icon: '🃏', title: 'Memory Pairs', desc: 'Gentle card-matching game with happy animal symbols.' },
-    { id: 'object-naming', category: 'brain', icon: '☕', title: 'Object Naming', desc: 'Name familiar everyday objects like teacups and clocks.' },
-    { id: 'simple-sorting', category: 'brain', icon: '🧺', title: 'Simple Sorting', desc: 'Sort items into natural buckets like fruits and vegetables.' },
-    { id: 'color-shape', category: 'brain', icon: '🎨', title: 'Colour & Shape', desc: 'Match warm colours and friendly geometric shapes.' },
-    { id: 'orientation', category: 'brain', icon: '☀️', title: 'Today’s Time & Season', desc: 'Gentle questions about the time of day and season.' },
-    { id: 'simple-jigsaw', category: 'brain', icon: '🧩', title: 'Gentle Jigsaw', desc: 'A 4-piece soothing puzzle from your family pictures.' },
-    { id: 'daily-routine', category: 'brain', icon: '🫖', title: 'Daily Routine', desc: 'Order peaceful steps like making chai or morning teeth brushing.' }
+    // General
+    { id: 'memory-pairs', category: 'brain', tag: 'PAIRS', title: 'MEMORY PAIRS', desc: 'Card-matching game with friendly symbols.' },
+    { id: 'object-naming', category: 'brain', tag: 'OBJECTS', title: 'OBJECT NAMING', desc: 'Name common items like teacups and clocks.' },
+    { id: 'simple-sorting', category: 'brain', tag: 'SORT', title: 'SIMPLE SORTING', desc: 'Sort items into natural categories.' },
+    { id: 'color-shape', category: 'brain', tag: 'SHAPES', title: 'COLOUR & SHAPE', desc: 'Match vibrant colours and clean geometric shapes.' },
+    { id: 'orientation', category: 'brain', tag: 'TIME', title: 'TIME & SEASON', desc: 'Questions on time of day, day of week, and season.' },
+    { id: 'simple-jigsaw', category: 'brain', tag: 'PUZZLE', title: 'GENTLE JIGSAW', desc: '4-piece jigsaw puzzle from family pictures.' },
+    { id: 'daily-routine', category: 'brain', tag: 'ROUTINE', title: 'DAILY ROUTINE', desc: 'Sequence steps like making tea or morning wash.' }
   ];
 
   const filteredGames = filter === 'all'
@@ -43,61 +37,57 @@ export default function GameSelect() {
     <div className="game-select-page">
       <div className="game-select-container">
         
-        {/* Header */}
-        <div className="game-select-header">
-          <button type="button" className="game-select-back" onClick={() => navigate('/patient')}>
-            ⬅ {t('back_home')}
-          </button>
-          <h1 className="game-select-title">🎮 {t('play_games')}</h1>
-          <p className="game-select-subtitle">
-            Choose any activity you like today. There is no rush and no timers.
-          </p>
+        {/* Top Controls */}
+        <div className="game-select-strip">
+          <div className="game-select-filters">
+            <button
+              type="button"
+              className={`filter-tab ${filter === 'all' ? 'filter-tab--active' : ''}`}
+              onClick={() => setFilter('all')}
+            >
+              ALL ({games.length})
+            </button>
+            <button
+              type="button"
+              className={`filter-tab ${filter === 'family' ? 'filter-tab--active' : ''}`}
+              onClick={() => setFilter('family')}
+            >
+              FAMILY & CONTENT (7)
+            </button>
+            <button
+              type="button"
+              className={`filter-tab ${filter === 'brain' ? 'filter-tab--active' : ''}`}
+              onClick={() => setFilter('brain')}
+            >
+              MIND & COMFORT (7)
+            </button>
+          </div>
         </div>
 
-        {/* Filter Pills */}
-        <div className="game-select-filters">
-          <button
-            type="button"
-            className={`filter-pill ${filter === 'all' ? 'filter-pill--active' : ''}`}
-            onClick={() => setFilter('all')}
-          >
-            🌟 All Games ({games.length})
-          </button>
-          <button
-            type="button"
-            className={`filter-pill ${filter === 'family' ? 'filter-pill--active' : ''}`}
-            onClick={() => setFilter('family')}
-          >
-            👨‍👩‍👧 Family & Memories (7)
-          </button>
-          <button
-            type="button"
-            className={`filter-pill ${filter === 'brain' ? 'filter-pill--active' : ''}`}
-            onClick={() => setFilter('brain')}
-          >
-            🧩 Mind & Relaxation (7)
-          </button>
-        </div>
-
-        {/* Games Grid */}
+        {/* Compact Retro Game Tiles Grid */}
         <div className="games-catalog-grid">
           {filteredGames.map(game => (
-            <GameCard
+            <div
               key={game.id}
-              icon={game.icon}
-              title={game.title}
-              description={game.desc}
-              badge={game.category === 'family' ? 'Personalised' : 'Relaxing'}
+              className="game-retro-tile card"
               onClick={() => navigate(`/patient/game/${game.id}`)}
-            />
+            >
+              <div className="tile-top-bar">
+                <span className="tile-tag">{game.tag}</span>
+                <span className="tile-cat-badge">{game.category.toUpperCase()}</span>
+              </div>
+              <h3 className="tile-title">{game.title}</h3>
+              <p className="tile-desc">{game.desc}</p>
+              <button type="button" className="tile-play-btn">
+                PLAY ▶
+              </button>
+            </div>
           ))}
         </div>
 
-        {/* Always visible help button */}
         <HelpButton />
 
       </div>
     </div>
   );
 }
-

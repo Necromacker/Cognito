@@ -1,53 +1,47 @@
 .help-button-container {
   position: fixed;
-  bottom: var(--space-xl);
-  right: var(--space-xl);
+  bottom: 20px;
+  right: 24px;
   z-index: var(--z-sticky);
 }
 
 .help-button {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
-  background-color: var(--color-bg-card);
-  border: 3px solid var(--color-accent);
+  gap: 8px;
+  background-color: var(--color-bg-dark);
+  border: 2px solid #000000;
   color: #ffffff;
-  padding: var(--space-md) var(--space-xl);
-  border-radius: var(--radius-full);
-  box-shadow: var(--shadow-xl);
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  box-shadow: 2px 2px 0px #000000;
   cursor: pointer;
-  min-height: var(--touch-lg);
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
-  transition: all var(--transition-normal);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: transform 0.1s ease;
 }
 
 .help-button:hover {
-  transform: scale(1.05);
-  box-shadow: var(--shadow-glow-gold);
-  border-color: var(--color-accent-hover);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px #000000;
 }
 
 .help-button--sent {
-  border-color: var(--color-secondary) !important;
-  background-color: var(--color-bg-medium) !important;
-  color: var(--color-secondary) !important;
-  box-shadow: var(--shadow-glow-green) !important;
+  background-color: var(--color-secondary) !important;
+  color: #ffffff !important;
 }
 
-.help-button__icon {
-  font-size: 28px;
+.help-button__badge {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  width: 18px;
+  height: 18px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 900;
 }
-
-@media (max-width: 600px) {
-  .help-button-container {
-    bottom: var(--space-md);
-    right: var(--space-md);
-    left: var(--space-md);
-  }
-  .help-button {
-    width: 100%;
-    justify-content: center;
-  }
-}
-

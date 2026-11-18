@@ -74,11 +74,11 @@ export default function PatientManager() {
         patientId: selectedPatient.id,
         doctorEmail
       });
-      setConsentMsg('Clinical consent successfully granted to doctor!');
+      setConsentMsg('Clinical consent granted to doctor');
       setDoctorEmail('');
       setTimeout(() => setConsentMsg(''), 4000);
     } catch (err) {
-      setConsentMsg(err.response?.data?.error || 'Failed to grant consent. Doctor must be registered & verified.');
+      setConsentMsg(err.response?.data?.error || 'Doctor must be registered and verified');
     }
   };
 
@@ -86,48 +86,42 @@ export default function PatientManager() {
     <div className="patient-manager-page">
       <div className="manager-container">
         
-        <div className="manager-header">
-          <div>
-            <div className="label-caps">Care Coordination</div>
-            <h1 className="manager-title">Patient Profiles & Game Settings</h1>
+        {/* Clean bar without noisy headers */}
+        <div className="manager-top-strip">
+          <div className="patients-selector-bar">
+            {patients.map(p => (
+              <button
+                key={p.id}
+                type="button"
+                className={`patient-pill-btn ${selectedPatient?.id === p.id ? 'patient-pill-btn--active' : ''}`}
+                onClick={() => setSelectedPatient(p)}
+              >
+                {p.name} [PIN {p.pin}]
+              </button>
+            ))}
           </div>
           <Button variant="primary" onClick={() => setIsModalOpen(true)}>
-            + Add New Patient Profile
+            + Add Patient
           </Button>
-        </div>
-
-        {/* Patients List */}
-        <div className="patients-selector-bar">
-          {patients.map(p => (
-            <button
-              key={p.id}
-              type="button"
-              className={`patient-pill-btn ${selectedPatient?.id === p.id ? 'patient-pill-btn--active' : ''}`}
-              onClick={() => setSelectedPatient(p)}
-            >
-              👴 {p.name} (PIN: {p.pin})
-            </button>
-          ))}
         </div>
 
         {selectedPatient && (
           <div className="manager-panels-grid">
             {/* Patient Profile Card */}
             <div className="manager-card">
-              <div className="label-caps">Profile Overview</div>
+              <div className="card-top-tag">PROFILE</div>
               <h2 className="manager-card__title">{selectedPatient.name}</h2>
               <div className="profile-details-list">
-                <p><strong>Age:</strong> {selectedPatient.age || '—'}</p>
-                <p><strong>Stage:</strong> {selectedPatient.stage?.toUpperCase()}</p>
-                <p><strong>Patient PIN:</strong> {selectedPatient.pin}</p>
-                <p><strong>Likes & Comforts:</strong> {selectedPatient.likes || 'None added'}</p>
-                <p><strong>Sensory Triggers to Avoid:</strong> {selectedPatient.avoid || 'None added'}</p>
+                <div className="profile-row"><span>Age</span> <strong>{selectedPatient.age || '—'}</strong></div>
+                <div className="profile-row"><span>Stage</span> <strong>{selectedPatient.stage?.toUpperCase()}</strong></div>
+                <div className="profile-row"><span>PIN</span> <strong>{selectedPatient.pin}</strong></div>
+                <div className="profile-row"><span>Likes</span> <span>{selectedPatient.likes || 'None added'}</span></div>
+                <div className="profile-row"><span>Triggers</span> <span>{selectedPatient.avoid || 'None added'}</span></div>
               </div>
 
               {/* Doctor Consent Invite Section */}
               <div className="consent-invite-box">
-                <div className="label-caps">Doctor Collaboration</div>
-                <h3 className="consent-title">Invite Clinician / Doctor</h3>
+                <div className="card-top-tag">DOCTOR ACCESS</div>
                 <form onSubmit={handleGrantDoctor} className="consent-form">
                   <input
                     type="email"
@@ -137,7 +131,7 @@ export default function PatientManager() {
                     value={doctorEmail}
                     onChange={e => setDoctorEmail(e.target.value)}
                   />
-                  <Button type="submit" variant="secondary">Grant Consent</Button>
+                  <Button type="submit" variant="secondary">Grant Access</Button>
                 </form>
                 {consentMsg && <p className="consent-feedback">{consentMsg}</p>}
               </div>
@@ -145,10 +139,7 @@ export default function PatientManager() {
 
             {/* Game Controls per Patient */}
             <div className="manager-card">
-              <div className="label-caps">Customised Cognitive Schedule</div>
-              <h2 className="manager-card__title">Enabled Activities (All 14 Games)</h2>
-              <p className="manager-card__sub">Toggle games to tailor cognitive stimulation according to energy and mood.</p>
-
+              <div className="card-top-tag">ACTIVE MODULES</div>
               <div className="games-settings-list">
                 {games.map(g => (
                   <div key={g.id} className="game-setting-row">
@@ -158,7 +149,7 @@ export default function PatientManager() {
                       className={`toggle-switch-btn ${g.is_enabled ? 'toggle-switch--on' : 'toggle-switch--off'}`}
                       onClick={() => handleToggleGame(g.game_type, g.is_enabled)}
                     >
-                      {g.is_enabled ? 'ENABLED ✓' : 'DISABLED ✕'}
+                      {g.is_enabled ? 'ON' : 'OFF'}
                     </button>
                   </div>
                 ))}
@@ -171,18 +162,18 @@ export default function PatientManager() {
         <Modal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          title="Create Patient Profile"
+          title="Create Patient"
         >
           <form onSubmit={handleCreatePatient} className="patient-create-form">
             <div className="form-group">
-              <label className="form-label">Patient Name</label>
+              <label className="form-label">Full Name</label>
               <input
                 type="text"
                 required
                 className="form-input"
                 value={name}
                 onChange={e => setName(e.target.value)}
-                placeholder="e.g. Ramesh Sharma"
+                placeholder="Patient Name"
               />
             </div>
             <div className="form-group">
@@ -192,11 +183,11 @@ export default function PatientManager() {
                 className="form-input"
                 value={age}
                 onChange={e => setAge(e.target.value)}
-                placeholder="e.g. 74"
+                placeholder="Age"
               />
             </div>
             <div className="form-group">
-              <label className="form-label">4-Digit Patient Secret PIN</label>
+              <label className="form-label">4-Digit PIN</label>
               <input
                 type="text"
                 maxLength={4}
@@ -216,24 +207,24 @@ export default function PatientManager() {
               </select>
             </div>
             <div className="form-group">
-              <label className="form-label">Likes / Comforting Memories</label>
+              <label className="form-label">Comforts / Memories</label>
               <textarea
                 className="form-textarea"
                 value={likes}
                 onChange={e => setLikes(e.target.value)}
-                placeholder="Morning gardening, old songs, cricket, chai..."
+                placeholder="Gardening, songs, stories..."
               ></textarea>
             </div>
             <div className="form-group">
-              <label className="form-label">Things / Sounds to Avoid</label>
+              <label className="form-label">Sensory Triggers</label>
               <textarea
                 className="form-textarea"
                 value={avoid}
                 onChange={e => setAvoid(e.target.value)}
-                placeholder="Loud buzzers, sudden alarms, crowded scenes..."
+                placeholder="Loud noises, crowded rooms..."
               ></textarea>
             </div>
-            <Button type="submit" variant="primary">Create Patient Profile</Button>
+            <Button type="submit" variant="primary">Save Patient</Button>
           </form>
         </Modal>
 

@@ -10,7 +10,7 @@ export default function Login() {
   const { t } = useLanguage();
   const navigate = useNavigate();
 
-  const [activeTab, setActiveTab] = useState('patient'); // 'patient' or 'staff'
+  const [activeTab, setActiveTab] = useState('patient');
   const [pin, setPin] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,7 +20,6 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Patient PIN Pad buttons
   const handlePinDigit = (digit) => {
     if (pin.length < 4) {
       setPin(prev => prev + digit);
@@ -34,7 +33,7 @@ export default function Login() {
   const handlePatientSubmit = async (e) => {
     if (e) e.preventDefault();
     if (pin.length !== 4) {
-      setError('Please enter your 4-digit code');
+      setError('Enter 4-digit PIN');
       return;
     }
     setError('');
@@ -43,7 +42,7 @@ export default function Login() {
       await pinLogin(pin);
       navigate('/patient');
     } catch (err) {
-      setError(err.response?.data?.error || 'Invalid PIN. Please ask your caretaker for help.');
+      setError(err.response?.data?.error || 'Incorrect PIN. Try again.');
     } finally {
       setLoading(false);
     }
@@ -59,16 +58,14 @@ export default function Login() {
       } else {
         await login(email, password);
       }
-      // Redirect based on role or let state handle it
       navigate(role === 'doctor' ? '/doctor' : (role === 'admin' ? '/admin' : '/caretaker'));
     } catch (err) {
-      setError(err.response?.data?.error || 'Authentication failed. Please check credentials.');
+      setError(err.response?.data?.error || 'Authentication failed');
     } finally {
       setLoading(false);
     }
   };
 
-  // Demo one-click shortcuts for testing
   const fillDemo = (demoType) => {
     setError('');
     if (demoType === 'patient') {
@@ -94,211 +91,171 @@ export default function Login() {
 
   return (
     <div className="login-page">
-      <div className="login-container">
-        {/* Header */}
-        <div className="login-header">
-          <div className="login-logo-pill">
-            <span role="img" aria-label="brain">🧠</span> COGNITO CARE
+      <div className="login-stage">
+        
+        {/* Main Retro Card */}
+        <div className="login-box card">
+          <div className="login-top-tag">
+            <span className="badge badge--pink">SYSTEM</span>
+            <span className="badge badge--green">DEMO READY</span>
           </div>
-          <h1 className="login-title">{t('login_title')}</h1>
-          <p className="login-subtitle">{t('login_subtitle')}</p>
-        </div>
 
-        {/* Quick Demo Logins Bar */}
-        <div className="demo-shortcuts" aria-label="Demo one-click logins">
-          <span className="demo-shortcuts__label">Quick Demo Access:</span>
-          <button type="button" className="demo-chip demo-chip--patient" onClick={() => fillDemo('patient')}>
-            👴 Patient (PIN 1234)
-          </button>
-          <button type="button" className="demo-chip" onClick={() => fillDemo('caretaker')}>
-            👩‍⚕️ Caretaker
-          </button>
-          <button type="button" className="demo-chip" onClick={() => fillDemo('doctor')}>
-            🩺 Doctor
-          </button>
-          <button type="button" className="demo-chip" onClick={() => fillDemo('admin')}>
-            🛡️ Admin
-          </button>
-        </div>
+          <h1 className="login-title">COGNITO</h1>
+          <p className="login-subtitle">Cognitive engagement & care coordination platform.</p>
 
-        {/* Tab Switcher */}
-        <div className="login-tabs" role="tablist">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === 'patient'}
-            className={`login-tab ${activeTab === 'patient' ? 'login-tab--active' : ''}`}
-            onClick={() => { setActiveTab('patient'); setError(''); }}
-          >
-            👴 {t('tab_patient')}
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === 'staff'}
-            className={`login-tab ${activeTab === 'staff' ? 'login-tab--active' : ''}`}
-            onClick={() => { setActiveTab('staff'); setError(''); }}
-          >
-            💼 {t('tab_caretaker_doctor')}
-          </button>
-        </div>
-
-        {/* Error notification */}
-        {error && (
-          <div className="login-error-alert" role="alert">
-            <span>ℹ️</span> {error}
+          {/* Clean Tab Switcher */}
+          <div className="login-tabs">
+            <button
+              type="button"
+              className={`login-tab ${activeTab === 'patient' ? 'login-tab--active' : ''}`}
+              onClick={() => { setActiveTab('patient'); setError(''); }}
+            >
+              PATIENT PIN
+            </button>
+            <button
+              type="button"
+              className={`login-tab ${activeTab === 'staff' ? 'login-tab--active' : ''}`}
+              onClick={() => { setActiveTab('staff'); setError(''); }}
+            >
+              STAFF LOGIN
+            </button>
           </div>
-        )}
 
-        {/* Patient PIN Login View */}
-        {activeTab === 'patient' ? (
-          <div className="patient-login-box">
-            <p className="patient-pin-instruction">{t('pin_prompt')}</p>
+          {error && <div className="login-error-alert">{error}</div>}
 
-            {/* PIN Display Dots */}
-            <div className="pin-display">
-              {[0, 1, 2, 3].map(index => (
-                <div
-                  key={index}
-                  className={`pin-dot ${pin.length > index ? 'pin-dot--filled' : ''}`}
-                >
-                  {pin.length > index ? '●' : '○'}
-                </div>
-              ))}
-            </div>
+          {/* Patient PIN View */}
+          {activeTab === 'patient' ? (
+            <div className="patient-pin-flow">
+              <div className="pin-dots-display">
+                {[0, 1, 2, 3].map(idx => (
+                  <div key={idx} className={`pin-slot ${pin.length > idx ? 'pin-slot--filled' : ''}`}>
+                    {pin.length > idx ? '●' : '—'}
+                  </div>
+                ))}
+              </div>
 
-            {/* Big Dementia-Friendly Numeric Keypad (minimum 72px touch targets) */}
-            <div className="pin-keypad">
-              {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map(digit => (
-                <button
-                  key={digit}
-                  type="button"
-                  className="pin-key"
-                  onClick={() => handlePinDigit(digit)}
-                >
-                  {digit}
+              <div className="pin-keypad-compact">
+                {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map(d => (
+                  <button key={d} type="button" className="pin-num-btn" onClick={() => handlePinDigit(d)}>
+                    {d}
+                  </button>
+                ))}
+                <button type="button" className="pin-num-btn pin-num-btn--action" onClick={handlePinBackspace}>
+                  DEL
                 </button>
-              ))}
-              <button
-                type="button"
-                className="pin-key pin-key--action"
-                onClick={handlePinBackspace}
-                aria-label="Delete last digit"
-              >
-                ⌫
-              </button>
-              <button
-                type="button"
-                className="pin-key"
-                onClick={() => handlePinDigit('0')}
-              >
-                0
-              </button>
-              <button
-                type="button"
-                className="pin-key pin-key--submit"
+                <button type="button" className="pin-num-btn" onClick={() => handlePinDigit('0')}>
+                  0
+                </button>
+                <button
+                  type="button"
+                  className="pin-num-btn pin-num-btn--enter"
+                  onClick={handlePatientSubmit}
+                  disabled={pin.length !== 4 || loading}
+                >
+                  OK
+                </button>
+              </div>
+
+              <Button
+                variant="primary"
                 onClick={handlePatientSubmit}
                 disabled={pin.length !== 4 || loading}
-                aria-label="Enter PIN"
+                style={{ width: '100%' }}
               >
-                ➔
-              </button>
+                {loading ? 'Entering...' : 'ENTER'}
+              </Button>
             </div>
+          ) : (
+            <form className="staff-form" onSubmit={handleStaffSubmit}>
+              {isRegistering && (
+                <>
+                  <div className="form-group">
+                    <label className="form-label">Full Name</label>
+                    <input
+                      type="text"
+                      required
+                      className="form-input"
+                      value={name}
+                      onChange={e => setName(e.target.value)}
+                      placeholder="Name"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Role</label>
+                    <select className="form-select" value={role} onChange={e => setRole(e.target.value)}>
+                      <option value="caretaker">Caretaker / Family</option>
+                      <option value="doctor">Doctor / Clinician</option>
+                    </select>
+                  </div>
+                </>
+              )}
 
-            <Button
-              variant="patient"
-              size="patient"
-              className="patient-submit-btn"
-              onClick={handlePatientSubmit}
-              disabled={pin.length !== 4 || loading}
-            >
-              {loading ? 'Entering...' : 'Open My Cognito ➔'}
-            </Button>
+              <div className="form-group">
+                <label className="form-label">Email</label>
+                <input
+                  type="email"
+                  required
+                  className="form-input"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  placeholder="name@example.com"
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Password</label>
+                <input
+                  type="password"
+                  required
+                  className="form-input"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                />
+              </div>
+
+              <Button type="submit" variant="primary" style={{ width: '100%', marginTop: '6px' }}>
+                {loading ? 'Processing...' : (isRegistering ? 'REGISTER' : 'SIGN IN')}
+              </Button>
+
+              <div className="toggle-reg">
+                <button
+                  type="button"
+                  className="reg-btn"
+                  onClick={() => { setIsRegistering(!isRegistering); setError(''); }}
+                >
+                  {isRegistering ? 'Have account? Sign in' : 'Create new account'}
+                </button>
+              </div>
+            </form>
+          )}
+
+          <div className="disclaimer-note">
+            This app supports cognitive engagement. It is not a diagnostic tool.
           </div>
-        ) : (
-          /* Staff (Caretaker / Doctor / Admin) View */
-          <form className="staff-login-form" onSubmit={handleStaffSubmit}>
-            {isRegistering && (
-              <>
-                <div className="form-group">
-                  <label className="form-label">Full Name</label>
-                  <input
-                    type="text"
-                    required
-                    className="form-input"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="e.g. Dr. Anjali Desai or Priya Sharma"
-                  />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Role</label>
-                  <select
-                    className="form-select"
-                    value={role}
-                    onChange={(e) => setRole(e.target.value)}
-                  >
-                    <option value="caretaker">Caretaker / Family Member</option>
-                    <option value="doctor">Doctor / Clinical Specialist</option>
-                  </select>
-                </div>
-              </>
-            )}
-
-            <div className="form-group">
-              <label className="form-label">{t('email')}</label>
-              <input
-                type="email"
-                required
-                className="form-input"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="name@example.com"
-              />
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">{t('password')}</label>
-              <input
-                type="password"
-                required
-                className="form-input"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-              />
-            </div>
-
-            <Button
-              type="submit"
-              variant="primary"
-              size="large"
-              className="staff-submit-btn"
-              disabled={loading}
-            >
-              {loading ? 'Signing In...' : (isRegistering ? t('register') : t('sign_in'))}
-            </Button>
-
-            <div className="login-toggle-mode">
-              <button
-                type="button"
-                className="link-btn"
-                onClick={() => { setIsRegistering(!isRegistering); setError(''); }}
-              >
-                {isRegistering
-                  ? 'Already have an account? Sign in here'
-                  : 'Need a new caretaker or doctor account? Register'}
-              </button>
-            </div>
-          </form>
-        )}
-
-        {/* Safety Disclaimer */}
-        <div className="login-disclaimer">
-          {t('disclaimer')}
         </div>
+
+        {/* Yellow Post-It Note Callout matching Reference "2P COUCH CO-OP" */}
+        <div className="postit-card login-postit">
+          <div className="postit-card__title">QUICK ACCESS</div>
+          <div className="postit-card__text">ONE-CLICK DEMO ACCOUNTS:</div>
+          <div className="postit-btns">
+            <button type="button" className="postit-pill" onClick={() => fillDemo('patient')}>
+              Patient PIN 1234
+            </button>
+            <button type="button" className="postit-pill" onClick={() => fillDemo('caretaker')}>
+              Caretaker
+            </button>
+            <button type="button" className="postit-pill" onClick={() => fillDemo('doctor')}>
+              Doctor
+            </button>
+            <button type="button" className="postit-pill" onClick={() => fillDemo('admin')}>
+              Admin
+            </button>
+          </div>
+        </div>
+
       </div>
     </div>
   );
 }
-
