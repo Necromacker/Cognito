@@ -1,0 +1,53 @@
+.routine-game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.routine-sub {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-xl);
+}
+.routine-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  width: 100%;
+  max-width: 580px;
+  margin-bottom: var(--space-xl);
+}
+.routine-step-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  background-color: var(--color-bg-card);
+  border: 3px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-md) var(--space-lg);
+  text-align: left;
+}
+.routine-num {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-black);
+  color: var(--color-secondary);
+}
+.routine-icon {
+  font-size: 36px;
+}
+.routine-text {
+  flex: 1;
+  font-size: var(--font-size-lg);
+  color: #ffffff;
+  font-weight: var(--font-weight-semibold);
+}
+.routine-move-btn {
+  background-color: var(--color-bg-medium);
+  border: 1px solid var(--color-border);
+  color: var(--color-accent);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+}
