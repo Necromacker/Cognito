@@ -46,24 +46,24 @@ export default function Reminders() {
   return (
     <div className="reminders-page">
       <div className="reminders-container">
-        <h1 className="reminders-title">⏰ Reminders & Gentle Prompts</h1>
-
-        <form onSubmit={handleAdd} className="reminder-add-card">
+        
+        <form onSubmit={handleAdd} className="reminder-add-card card">
+          <div className="card-top-tag">NEW REMINDER</div>
           <div className="form-row">
             <input
               type="text"
               required
-              placeholder="e.g. Morning Heart Medicine"
+              placeholder="Reminder description (e.g. Morning Medication)"
               className="form-input"
               value={title}
               onChange={e => setTitle(e.target.value)}
               style={{ flex: 2 }}
             />
             <select className="form-select" value={type} onChange={e => setType(e.target.value)} style={{ flex: 1 }}>
-              <option value="medication">💊 Medication</option>
-              <option value="game">🎮 Gentle Game</option>
-              <option value="appointment">🩺 Doctor Check-in</option>
-              <option value="custom">🌸 Custom Activity</option>
+              <option value="medication">MEDICATION</option>
+              <option value="game">GENTLE GAME</option>
+              <option value="appointment">CLINICAL VISIT</option>
+              <option value="custom">GENERAL</option>
             </select>
             <input
               type="time"
@@ -71,21 +71,23 @@ export default function Reminders() {
               className="form-input"
               value={time}
               onChange={e => setTime(e.target.value)}
-              style={{ width: '130px' }}
+              style={{ width: '110px' }}
             />
-            <Button type="submit" variant="primary">Add Reminder</Button>
+            <Button type="submit" variant="primary">ADD</Button>
           </div>
         </form>
 
         <div className="reminders-list">
           {reminders.map(r => (
-            <div key={r.id} className="reminder-card">
-              <span className="reminder-badge">{r.type.toUpperCase()}</span>
+            <div key={r.id} className="reminder-card card">
+              <span className="badge badge--pink">{r.type.toUpperCase()}</span>
               <div className="reminder-info">
                 <span className="reminder-title-text">{r.title}</span>
-                <span className="reminder-time-text">Scheduled Daily at {r.time}</span>
+                <span className="reminder-time-text">Daily at {r.time}</span>
               </div>
-              <button type="button" className="reminder-del-btn" onClick={() => handleDelete(r.id)}>✕</button>
+              <button type="button" className="reminder-del-btn" onClick={() => handleDelete(r.id)}>
+                REMOVE
+              </button>
             </div>
           ))}
         </div>

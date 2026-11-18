@@ -16,20 +16,22 @@ export default function DoctorDashboard() {
   return (
     <div className="doctor-dashboard-page">
       <div className="doctor-container">
-        <div className="label-caps">Clinical Portal</div>
-        <h1 className="doctor-title">Consented Patients Under Care</h1>
+        
+        <div className="doctor-top-bar">
+          <div className="card-top-tag">CLINICAL CONSENT REGISTRY</div>
+        </div>
 
         <div className="doctor-patients-grid">
           {patients.map(p => (
-            <div key={p.id} className="doctor-patient-card" onClick={() => navigate(`/doctor/patient/${p.id}`)}>
+            <div key={p.id} className="doctor-patient-card card" onClick={() => navigate(`/doctor/patient/${p.id}`)}>
               <div className="doctor-card__header">
                 <h2 className="doctor-patient-name">{p.name}</h2>
-                <span className="doctor-stage-badge">{p.stage?.toUpperCase() || 'EARLY'}</span>
+                <span className="badge badge--green">{p.stage?.toUpperCase() || 'EARLY'}</span>
               </div>
-              <p className="doctor-patient-caretaker">Caretaker: {p.caretaker_name || 'Primary Care'}</p>
-              <p className="doctor-patient-consent">Consent Granted: {p.granted_at || 'Active'}</p>
-              <button type="button" className="doctor-view-btn">
-                View Clinical Breakdown & Report ➔
+              <p className="doctor-patient-info">Caretaker: {p.caretaker_name || 'Family'}</p>
+              <p className="doctor-patient-info">Granted: {p.granted_at || 'Active'}</p>
+              <button type="button" className="btn btn--primary" style={{ width: '100%', marginTop: '12px' }}>
+                REVIEW COGNITIVE DATA ➔
               </button>
             </div>
           ))}

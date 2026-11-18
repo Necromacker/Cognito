@@ -48,7 +48,7 @@ export default function DailyLog() {
         activities,
         notes
       });
-      setSavedMsg('Daily log saved successfully!');
+      setSavedMsg('Saved');
       setTimeout(() => setSavedMsg(''), 3000);
       loadPastLogs();
     } catch (err) {
@@ -60,18 +60,13 @@ export default function DailyLog() {
     <div className="daily-log-page">
       <div className="daily-log-container">
         
-        <div className="daily-log-header">
-          <div>
-            <div className="label-caps">Care Journal</div>
-            <h1 className="daily-log-title">Daily Observation Log</h1>
-          </div>
-        </div>
-
         <div className="daily-log-layout">
           {/* Form */}
-          <form className="log-form-card" onSubmit={handleSubmit}>
+          <form className="log-form-card card" onSubmit={handleSubmit}>
+            <div className="card-top-tag">NEW LOG ENTRY</div>
+
             <div className="form-group">
-              <label className="form-label">Log Date</label>
+              <label className="form-label">Date</label>
               <input
                 type="date"
                 required
@@ -82,17 +77,17 @@ export default function DailyLog() {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Patient General Mood Today</label>
+              <label className="form-label">Observed Mood</label>
               <select className="form-select" value={mood} onChange={e => setMood(e.target.value)}>
-                <option value="happy">😊 Happy & Smiling</option>
-                <option value="neutral">😐 Calm / Neutral</option>
-                <option value="sad">😢 Low / Sad / Withdrawn</option>
+                <option value="happy">Cheerful & Engaged</option>
+                <option value="neutral">Calm & Neutral</option>
+                <option value="sad">Low & Quiet</option>
               </select>
             </div>
 
             <div className="form-row">
               <div className="form-group" style={{ flex: 1 }}>
-                <label className="form-label">Hours of Sleep</label>
+                <label className="form-label">Sleep (Hours)</label>
                 <input
                   type="number"
                   step="0.5"
@@ -103,11 +98,11 @@ export default function DailyLog() {
               </div>
 
               <div className="form-group" style={{ flex: 1 }}>
-                <label className="form-label">Sleep Quality</label>
+                <label className="form-label">Quality</label>
                 <select className="form-select" value={sleepQuality} onChange={e => setSleepQuality(e.target.value)}>
-                  <option value="good">Good / Restful</option>
-                  <option value="fair">Fair / Woke Up Once</option>
-                  <option value="poor">Restless / Interrupted</option>
+                  <option value="good">Restful</option>
+                  <option value="fair">Fair</option>
+                  <option value="poor">Interrupted</option>
                 </select>
               </div>
             </div>
@@ -119,7 +114,7 @@ export default function DailyLog() {
                   checked={medicationTaken}
                   onChange={e => setMedicationTaken(e.target.checked)}
                 />
-                <span>Prescribed Medications Taken on Time</span>
+                <span>Medications taken on schedule</span>
               </label>
             </div>
 
@@ -129,7 +124,7 @@ export default function DailyLog() {
                 className="form-textarea"
                 value={meals}
                 onChange={e => setMeals(e.target.value)}
-                placeholder="Poha for breakfast, dal rice for lunch, had fruits..."
+                placeholder="Breakfast, lunch, tea..."
               ></textarea>
             </div>
 
@@ -139,42 +134,41 @@ export default function DailyLog() {
                 className="form-textarea"
                 value={activities}
                 onChange={e => setActivities(e.target.value)}
-                placeholder="Walked in garden, listened to songs, played with grandson..."
+                placeholder="Gardening, music, walk..."
               ></textarea>
             </div>
 
             <div className="form-group">
-              <label className="form-label">Care Notes & Behaviour</label>
+              <label className="form-label">Care Notes</label>
               <textarea
                 className="form-textarea"
                 value={notes}
                 onChange={e => setNotes(e.target.value)}
-                placeholder="Any special moments, confusion episodes, or pleasant recollections..."
+                placeholder="Observations, lucid memories..."
               ></textarea>
             </div>
 
             <Button type="submit" variant="primary">
-              Save Daily Entry
+              Save Entry
             </Button>
 
-            {savedMsg && <p className="log-saved-msg">✓ {savedMsg}</p>}
+            {savedMsg && <span className="log-saved-msg">✓ {savedMsg}</span>}
           </form>
 
           {/* Past Logs */}
-          <div className="past-logs-card">
-            <div className="label-caps">Log History</div>
-            <h2 className="past-logs-title">Past Entries</h2>
+          <div className="past-logs-card card">
+            <div className="card-top-tag">LOG HISTORY</div>
 
             <div className="past-logs-list">
               {pastLogs.map(l => (
                 <div key={l.id} className="past-log-entry">
                   <div className="past-log-entry__header">
                     <span className="past-log-date">{l.log_date}</span>
-                    <span className="past-log-mood">{l.mood === 'happy' ? '😊 Happy' : l.mood === 'sad' ? '😢 Low' : '😐 Calm'}</span>
+                    <span className="badge badge--pink">{l.mood?.toUpperCase()}</span>
                   </div>
                   <div className="past-log-stats">
-                    <span>🌙 Sleep: {l.sleep_hours} hrs ({l.sleep_quality})</span>
-                    <span>💊 Meds: {l.medication_taken ? 'Yes' : 'No'}</span>
+                    <span>Sleep: {l.sleep_hours}h ({l.sleep_quality})</span>
+                    <span>Meds: {l.medication_taken ? 'Yes' : 'No'}</span>
                   </div>
                   {l.notes && <p className="past-log-notes">"{l.notes}"</p>}
                 </div>

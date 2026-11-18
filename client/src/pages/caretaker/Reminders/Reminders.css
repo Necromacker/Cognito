@@ -1,65 +1,54 @@
 .reminders-page {
-  min-height: calc(100vh - 80px);
-  padding: var(--space-xl) var(--space-lg);
-  background-color: var(--color-bg-page);
+  min-height: calc(100vh - 120px);
+  padding: var(--space-lg) var(--space-lg);
 }
+
 .reminders-container {
   max-width: 900px;
   margin: 0 auto;
 }
-.reminders-title {
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-black);
-  color: #ffffff;
-  margin-bottom: var(--space-xl);
-}
+
 .reminder-add-card {
-  background-color: var(--color-bg-card);
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-xl);
   padding: var(--space-lg);
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-lg);
 }
+
 .reminders-list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
+  gap: var(--space-xs);
 }
+
 .reminder-card {
   display: flex;
   align-items: center;
   gap: var(--space-md);
-  background-color: var(--color-bg-card);
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-md) var(--space-lg);
+  padding: var(--space-md);
 }
-.reminder-badge {
-  background-color: var(--color-accent-bg);
-  border: 1px solid var(--color-accent);
-  color: var(--color-accent);
-  font-size: 11px;
-  font-weight: bold;
-  padding: 3px 8px;
-  border-radius: var(--radius-full);
-}
+
 .reminder-info {
   flex: 1;
 }
+
 .reminder-title-text {
   display: block;
-  font-size: var(--font-size-lg);
-  font-weight: bold;
-  color: #ffffff;
+  font-size: var(--font-size-base);
+  font-weight: 800;
+  color: var(--color-text-primary);
 }
+
 .reminder-time-text {
-  font-size: var(--font-size-sm);
+  font-size: 11px;
   color: var(--color-text-secondary);
 }
+
 .reminder-del-btn {
-  background: none;
-  border: none;
-  color: var(--color-danger);
-  font-size: 18px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-primary);
+  font-size: 10px;
+  font-weight: 900;
+  padding: 4px 8px;
+  border-radius: 2px;
   cursor: pointer;
 }

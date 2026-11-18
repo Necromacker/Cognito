@@ -51,7 +51,7 @@ export default function ContentLibrary() {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to remove this item?')) return;
+    if (!window.confirm('Delete this item?')) return;
     const endpoint = `/content/${activeTab}/${id}`;
     try {
       await api.delete(endpoint);
@@ -100,67 +100,62 @@ export default function ContentLibrary() {
     <div className="content-library-page">
       <div className="content-lib-container">
         
-        <div className="content-lib-header">
-          <div>
-            <div className="label-caps">Personalised Memory Base</div>
-            <h1 className="content-lib-title">Content Library</h1>
+        <div className="content-lib-top-bar">
+          <div className="content-lib-tabs">
+            <button
+              type="button"
+              className={`lib-tab ${activeTab === 'people' ? 'lib-tab--active' : ''}`}
+              onClick={() => setActiveTab('people')}
+            >
+              PEOPLE ({activeTab === 'people' ? items.length : '—'})
+            </button>
+            <button
+              type="button"
+              className={`lib-tab ${activeTab === 'places' ? 'lib-tab--active' : ''}`}
+              onClick={() => setActiveTab('places')}
+            >
+              PLACES ({activeTab === 'places' ? items.length : '—'})
+            </button>
+            <button
+              type="button"
+              className={`lib-tab ${activeTab === 'songs' ? 'lib-tab--active' : ''}`}
+              onClick={() => setActiveTab('songs')}
+            >
+              SONGS ({activeTab === 'songs' ? items.length : '—'})
+            </button>
+            <button
+              type="button"
+              className={`lib-tab ${activeTab === 'life_events' ? 'lib-tab--active' : ''}`}
+              onClick={() => setActiveTab('life_events')}
+            >
+              TIMELINE ({activeTab === 'life_events' ? items.length : '—'})
+            </button>
           </div>
+
           <Button variant="primary" onClick={() => setIsModalOpen(true)}>
-            + Add New {activeTab.slice(0, -1).toUpperCase()}
+            + ADD {activeTab.slice(0, -1).toUpperCase()}
           </Button>
         </div>
 
-        {/* Tab switcher */}
-        <div className="content-lib-tabs">
-          <button
-            type="button"
-            className={`lib-tab ${activeTab === 'people' ? 'lib-tab--active' : ''}`}
-            onClick={() => setActiveTab('people')}
-          >
-            👥 People
-          </button>
-          <button
-            type="button"
-            className={`lib-tab ${activeTab === 'places' ? 'lib-tab--active' : ''}`}
-            onClick={() => setActiveTab('places')}
-          >
-            🏡 Places
-          </button>
-          <button
-            type="button"
-            className={`lib-tab ${activeTab === 'songs' ? 'lib-tab--active' : ''}`}
-            onClick={() => setActiveTab('songs')}
-          >
-            🎵 Songs
-          </button>
-          <button
-            type="button"
-            className={`lib-tab ${activeTab === 'life_events' ? 'lib-tab--active' : ''}`}
-            onClick={() => setActiveTab('life_events')}
-          >
-            🗓️ Life Events
-          </button>
-        </div>
-
-        {/* Items Table / Cards */}
+        {/* Items Grid */}
         <div className="lib-items-grid">
           {items.map(item => (
-            <div key={item.id} className={`lib-card ${item.is_hidden ? 'lib-card--hidden' : ''}`}>
+            <div key={item.id} className={`lib-card card ${item.is_hidden ? 'lib-card--hidden' : ''}`}>
               <div className="lib-card__img-wrap">
                 <img
                   src={item.photo_url || 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80'}
                   alt={item.name || item.title}
                   className="lib-card__img"
                 />
-                {item.is_hidden ? (
-                  <span className="lib-hidden-tag">HIDDEN FROM PATIENT</span>
-                ) : null}
+                {item.is_hidden && (
+                  <span className="lib-hidden-tag">HIDDEN</span>
+                )}
               </div>
 
               <div className="lib-card__content">
                 <h3 className="lib-card__title">{item.name || item.title}</h3>
                 {item.relationship && <span className="lib-card__rel">{item.relationship}</span>}
-                {item.year && <span className="lib-card__year">Year: {item.year}</span>}
+                {item.year && <span className="lib-card__year">YEAR {item.year}</span>}
                 <p className="lib-card__desc">{item.notes || item.description}</p>
               </div>
 
@@ -169,16 +164,15 @@ export default function ContentLibrary() {
                   type="button"
                   className="lib-action-btn"
                   onClick={() => handleToggleHide(item.id)}
-                  title={item.is_hidden ? 'Show to patient' : 'Hide from patient if upsetting'}
                 >
-                  {item.is_hidden ? '👁️ Show' : '🙈 Hide'}
+                  {item.is_hidden ? 'SHOW' : 'HIDE'}
                 </button>
                 <button
                   type="button"
                   className="lib-action-btn lib-action-btn--delete"
                   onClick={() => handleDelete(item.id)}
                 >
-                  🗑️ Delete
+                  DELETE
                 </button>
               </div>
             </div>
@@ -189,44 +183,44 @@ export default function ContentLibrary() {
         <Modal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          title={`Add New ${activeTab.toUpperCase()}`}
+          title={`Add ${activeTab.toUpperCase()}`}
         >
           <form onSubmit={handleSave} className="lib-add-form">
             <div className="form-group">
-              <label className="form-label">{activeTab === 'songs' ? 'Song Title' : 'Name / Title'}</label>
+              <label className="form-label">Name / Title</label>
               <input
                 type="text"
                 required
                 className="form-input"
                 value={name}
                 onChange={e => setName(e.target.value)}
-                placeholder="e.g. Priya Sharma or Family Wedding"
+                placeholder="Title"
               />
             </div>
 
             {activeTab === 'people' && (
               <div className="form-group">
-                <label className="form-label">Relationship to Patient</label>
+                <label className="form-label">Relationship</label>
                 <input
                   type="text"
                   required
                   className="form-input"
                   value={relationship}
                   onChange={e => setRelationship(e.target.value)}
-                  placeholder="e.g. Daughter, Wife, Friend"
+                  placeholder="Daughter, Son, Friend..."
                 />
               </div>
             )}
 
             {activeTab === 'life_events' && (
               <div className="form-group">
-                <label className="form-label">Approximate Year</label>
+                <label className="form-label">Year</label>
                 <input
                   type="number"
                   className="form-input"
                   value={year}
                   onChange={e => setYear(e.target.value)}
-                  placeholder="e.g. 1978"
+                  placeholder="1978"
                 />
               </div>
             )}
@@ -243,18 +237,16 @@ export default function ContentLibrary() {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Notes / Memory Description</label>
+              <label className="form-label">Memory Notes</label>
               <textarea
                 className="form-textarea"
                 value={description}
                 onChange={e => setDescription(e.target.value)}
-                placeholder="Add special calming details..."
+                placeholder="Calming memory description..."
               ></textarea>
             </div>
 
-            <Button type="submit" variant="primary" disabled={loading}>
-              {loading ? 'Saving...' : 'Save into Cognito'}
-            </Button>
+            <Button type="submit" variant="primary">Save</Button>
           </form>
         </Modal>
 
