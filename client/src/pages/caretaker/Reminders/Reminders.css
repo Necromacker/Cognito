@@ -1,0 +1,65 @@
+.reminders-page {
+  min-height: calc(100vh - 80px);
+  padding: var(--space-xl) var(--space-lg);
+  background-color: var(--color-bg-page);
+}
+.reminders-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.reminders-title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-black);
+  color: #ffffff;
+  margin-bottom: var(--space-xl);
+}
+.reminder-add-card {
+  background-color: var(--color-bg-card);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-xl);
+}
+.reminders-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+.reminder-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  background-color: var(--color-bg-card);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md) var(--space-lg);
+}
+.reminder-badge {
+  background-color: var(--color-accent-bg);
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
+  font-size: 11px;
+  font-weight: bold;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+}
+.reminder-info {
+  flex: 1;
+}
+.reminder-title-text {
+  display: block;
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+  color: #ffffff;
+}
+.reminder-time-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+.reminder-del-btn {
+  background: none;
+  border: none;
+  color: var(--color-danger);
+  font-size: 18px;
+  cursor: pointer;
+}

@@ -1,0 +1,160 @@
+.patient-manager-page {
+  min-height: calc(100vh - 80px);
+  padding: var(--space-xl) var(--space-lg);
+  background-color: var(--color-bg-page);
+}
+
+.manager-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.manager-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-xl);
+}
+
+.manager-title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-black);
+  color: #ffffff;
+}
+
+.patients-selector-bar {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xl);
+  flex-wrap: wrap;
+}
+
+.patient-pill-btn {
+  background-color: var(--color-bg-card);
+  border: 2px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.patient-pill-btn--active {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #ffffff;
+}
+
+.manager-panels-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xl);
+}
+
+.manager-card {
+  background-color: var(--color-bg-card);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+}
+
+.manager-card__title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-black);
+  color: #ffffff;
+  margin-bottom: var(--space-md);
+}
+
+.manager-card__sub {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-lg);
+}
+
+.profile-details-list p {
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.profile-details-list strong {
+  color: var(--color-accent);
+}
+
+.consent-invite-box {
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.consent-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: #ffffff;
+  margin-bottom: var(--space-sm);
+}
+
+.consent-form {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xs);
+}
+
+.consent-feedback {
+  font-size: var(--font-size-sm);
+  color: var(--color-secondary);
+  margin-top: var(--space-xs);
+}
+
+.games-settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+.game-setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color-bg-medium);
+  border: 1px solid var(--color-border);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+}
+
+.game-setting__name {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: #ffffff;
+}
+
+.toggle-switch-btn {
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+}
+
+.toggle-switch--on {
+  background-color: var(--color-secondary-bg);
+  border: 1px solid var(--color-secondary);
+  color: var(--color-secondary);
+}
+
+.toggle-switch--off {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 900px) {
+  .manager-panels-grid {
+    grid-template-columns: 1fr;
+  }
+}

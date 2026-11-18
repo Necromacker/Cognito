@@ -1,0 +1,123 @@
+.daily-log-page {
+  min-height: calc(100vh - 80px);
+  padding: var(--space-xl) var(--space-lg);
+  background-color: var(--color-bg-page);
+}
+
+.daily-log-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.daily-log-header {
+  margin-bottom: var(--space-xl);
+}
+
+.daily-log-title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-black);
+  color: #ffffff;
+}
+
+.daily-log-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xl);
+}
+
+.log-form-card,
+.past-logs-card {
+  background-color: var(--color-bg-card);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+}
+
+.form-row {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.checkbox-group {
+  margin: var(--space-md) 0;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.checkbox-label input {
+  width: 20px;
+  height: 20px;
+}
+
+.log-saved-msg {
+  color: var(--color-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+  margin-top: var(--space-sm);
+}
+
+.past-logs-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-black);
+  color: #ffffff;
+  margin-bottom: var(--space-lg);
+}
+
+.past-logs-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  max-height: 540px;
+  overflow-y: auto;
+}
+
+.past-log-entry {
+  background-color: var(--color-bg-medium);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+}
+
+.past-log-entry__header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--space-xs);
+}
+
+.past-log-date {
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.past-log-mood {
+  font-size: 13px;
+  color: var(--color-accent);
+}
+
+.past-log-stats {
+  display: flex;
+  gap: var(--space-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-xs);
+}
+
+.past-log-notes {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  font-style: italic;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .daily-log-layout {
+    grid-template-columns: 1fr;
+  }
+}

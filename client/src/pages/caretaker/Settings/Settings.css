@@ -1,0 +1,55 @@
+.settings-page {
+  min-height: calc(100vh - 80px);
+  padding: var(--space-xl) var(--space-lg);
+  background-color: var(--color-bg-page);
+}
+.settings-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.settings-title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-black);
+  color: #ffffff;
+  margin-bottom: var(--space-xl);
+}
+.settings-card {
+  background-color: var(--color-bg-card);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-xl);
+}
+.settings-card__title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-black);
+  color: #ffffff;
+  margin-bottom: var(--space-xs);
+}
+.settings-card__desc {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-lg);
+}
+.settings-backup-row {
+  margin-bottom: var(--space-xl);
+}
+.settings-restore-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+}
+.restore-msg {
+  color: var(--color-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+  margin-top: var(--space-sm);
+}
+.disclaimer-text {
+  font-size: var(--font-size-lg);
+  color: var(--color-info);
+  font-style: italic;
+  line-height: var(--line-height-relaxed);
+}
