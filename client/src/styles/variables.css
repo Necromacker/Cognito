@@ -1,0 +1,163 @@
+/* ===== COGNITO DESIGN TOKENS =====
+   Inspired by Pixel Picnic reference: dark backgrounds, hot pink accents,
+   green positive states, golden highlights — adapted for dementia-friendly UX.
+   ================================================================= */
+
+:root {
+  /* ── Colour Palette ── */
+  --color-bg-dark:        #1a1a2e;
+  --color-bg-medium:      #22223a;
+  --color-bg-card:        #2a2a4a;
+  --color-bg-light:       #f0eef5;
+  --color-bg-page:        #16162b;
+
+  --color-primary:        #ff2d78;   /* hot pink — primary accent */
+  --color-primary-hover:  #e6256b;
+  --color-primary-light:  #ff5c9a;
+  --color-primary-bg:     rgba(255, 45, 120, 0.12);
+
+  --color-secondary:      #2ecc71;   /* green — success, positive */
+  --color-secondary-hover:#27ae60;
+  --color-secondary-light:#6edd9a;
+  --color-secondary-bg:   rgba(46, 204, 113, 0.12);
+
+  --color-accent:         #ffd700;   /* golden yellow — highlights, stars */
+  --color-accent-hover:   #f0c800;
+  --color-accent-bg:      rgba(255, 215, 0, 0.12);
+
+  --color-info:           #3498db;
+  --color-info-bg:        rgba(52, 152, 219, 0.12);
+
+  --color-gentle:         #a78bfa;   /* lavender — gentle encouragement */
+  --color-gentle-bg:      rgba(167, 139, 250, 0.12);
+
+  --color-text-primary:   #ffffff;
+  --color-text-secondary: #b8b8d0;
+  --color-text-muted:     #8888a8;
+  --color-text-dark:      #1a1a2e;
+  --color-text-on-light:  #2a2a4a;
+
+  --color-border:         #3a3a5c;
+  --color-border-light:   #4a4a6c;
+  --color-border-focus:   var(--color-primary);
+
+  --color-overlay:        rgba(16, 16, 32, 0.7);
+  --color-danger:         #e74c3c;   /* only for caretaker/doctor, never patient */
+  --color-danger-bg:      rgba(231, 76, 60, 0.12);
+
+  /* ── Patient-safe colours (no red) ── */
+  --color-patient-positive: var(--color-secondary);
+  --color-patient-neutral:  var(--color-accent);
+  --color-patient-gentle:   var(--color-gentle);
+
+  /* ── Typography ── */
+  --font-family:          'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-family-display:  'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-family-mono:     'JetBrains Mono', 'Fira Code', monospace;
+
+  --font-size-xs:         14px;
+  --font-size-sm:         16px;
+  --font-size-base:       18px;    /* dementia-friendly minimum */
+  --font-size-md:         20px;
+  --font-size-lg:         24px;
+  --font-size-xl:         28px;    /* patient screen minimum heading */
+  --font-size-2xl:        36px;
+  --font-size-3xl:        48px;
+  --font-size-4xl:        64px;
+
+  --font-weight-normal:   400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+  --font-weight-black:    900;
+
+  --line-height-tight:    1.2;
+  --line-height-normal:   1.5;
+  --line-height-relaxed:  1.75;
+
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide:  0.05em;
+  --letter-spacing-caps:  0.12em;
+
+  /* ── Spacing ── */
+  --space-2xs:  4px;
+  --space-xs:   8px;
+  --space-sm:   12px;
+  --space-md:   16px;
+  --space-lg:   24px;
+  --space-xl:   32px;
+  --space-2xl:  48px;
+  --space-3xl:  64px;
+  --space-4xl:  96px;
+
+  /* ── Border Radius ── */
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
+  --radius-full: 9999px;
+
+  /* ── Shadows ── */
+  --shadow-sm:   0 2px 4px rgba(0, 0, 0, 0.2);
+  --shadow-md:   0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-lg:   0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-xl:   0 12px 40px rgba(0, 0, 0, 0.5);
+  --shadow-glow-pink:  0 0 20px rgba(255, 45, 120, 0.3);
+  --shadow-glow-green: 0 0 20px rgba(46, 204, 113, 0.3);
+  --shadow-glow-gold:  0 0 20px rgba(255, 215, 0, 0.3);
+
+  /* ── Touch Targets ── */
+  --touch-min:   56px;    /* minimum touch target for accessibility */
+  --touch-lg:    72px;    /* large touch target for patient screens */
+
+  /* ── Transitions ── */
+  --transition-fast:   150ms ease;
+  --transition-normal: 300ms ease;
+  --transition-slow:   500ms ease;
+
+  /* ── Z-index ── */
+  --z-dropdown:  100;
+  --z-sticky:    200;
+  --z-modal:     300;
+  --z-toast:     400;
+  --z-tooltip:   500;
+
+  /* ── Breakpoints (for reference, used in media queries) ── */
+  /* --bp-phone:  480px  */
+  /* --bp-tablet: 768px  */
+  /* --bp-laptop: 1024px */
+  /* --bp-desktop: 1280px */
+}
+
+/* ── High contrast mode ── */
+@media (prefers-contrast: more) {
+  :root {
+    --color-bg-dark:        #000000;
+    --color-bg-medium:      #111111;
+    --color-bg-card:        #1a1a1a;
+    --color-text-primary:   #ffffff;
+    --color-text-secondary: #e0e0e0;
+    --color-border:         #666666;
+    --color-primary:        #ff4488;
+    --color-secondary:      #44ff88;
+    --color-accent:         #ffee00;
+  }
+}
+
+/* ── Light theme option (for caretaker/doctor who prefer it) ── */
+[data-theme="light"] {
+  --color-bg-dark:        #f5f3fa;
+  --color-bg-medium:      #eae7f2;
+  --color-bg-card:        #ffffff;
+  --color-bg-page:        #f0edf7;
+  --color-text-primary:   #1a1a2e;
+  --color-text-secondary: #555570;
+  --color-text-muted:     #888898;
+  --color-border:         #d0d0e0;
+  --color-border-light:   #e0e0ef;
+  --shadow-sm:   0 2px 4px rgba(0, 0, 0, 0.08);
+  --shadow-md:   0 4px 12px rgba(0, 0, 0, 0.12);
+  --shadow-lg:   0 8px 24px rgba(0, 0, 0, 0.16);
+}
+

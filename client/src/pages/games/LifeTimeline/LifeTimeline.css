@@ -1,0 +1,95 @@
+.timeline-game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.timeline-sub {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-xl);
+}
+
+.timeline-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: var(--space-xl);
+}
+
+.timeline-event-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  background-color: var(--color-bg-card);
+  border: 3px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-md) var(--space-lg);
+  text-align: left;
+}
+
+.timeline-step-badge {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-black);
+  color: var(--color-primary);
+  width: 44px;
+}
+
+.timeline-event__img-wrap {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.timeline-event__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.timeline-event__text {
+  flex: 1;
+}
+
+.timeline-event__title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: #ffffff;
+  margin-bottom: 2px;
+}
+
+.timeline-event__desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.timeline-move-btn {
+  background-color: var(--color-bg-medium);
+  border: 1px solid var(--color-border);
+  color: var(--color-accent);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+}
+
+.timeline-confirm-btn {
+  min-height: var(--touch-lg);
+  background-color: var(--color-primary);
+  border: none;
+  color: #ffffff;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  padding: var(--space-md) var(--space-2xl);
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  box-shadow: var(--shadow-glow-pink);
+}
+

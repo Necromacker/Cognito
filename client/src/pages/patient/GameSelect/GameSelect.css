@@ -1,0 +1,84 @@
+.game-select-page {
+  min-height: calc(100vh - 80px);
+  padding: var(--space-xl) var(--space-md) var(--space-4xl);
+  background-color: var(--color-bg-page);
+}
+
+.game-select-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.game-select-header {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+
+.game-select-back {
+  background-color: var(--color-bg-card);
+  border: 2px solid var(--color-border);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  margin-bottom: var(--space-md);
+  transition: all var(--transition-fast);
+}
+
+.game-select-back:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.game-select-title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-black);
+  color: #ffffff;
+  margin-bottom: var(--space-xs);
+}
+
+.game-select-subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+}
+
+.game-select-filters {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-2xl);
+  flex-wrap: wrap;
+}
+
+.filter-pill {
+  background-color: var(--color-bg-card);
+  border: 2px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.filter-pill:hover {
+  border-color: var(--color-primary);
+  color: #ffffff;
+}
+
+.filter-pill--active {
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  color: #ffffff !important;
+  box-shadow: var(--shadow-glow-pink);
+}
+
+.games-catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: var(--space-xl);
+}
+

@@ -1,0 +1,53 @@
+.help-button-container {
+  position: fixed;
+  bottom: var(--space-xl);
+  right: var(--space-xl);
+  z-index: var(--z-sticky);
+}
+
+.help-button {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background-color: var(--color-bg-card);
+  border: 3px solid var(--color-accent);
+  color: #ffffff;
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-xl);
+  cursor: pointer;
+  min-height: var(--touch-lg);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  transition: all var(--transition-normal);
+}
+
+.help-button:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-glow-gold);
+  border-color: var(--color-accent-hover);
+}
+
+.help-button--sent {
+  border-color: var(--color-secondary) !important;
+  background-color: var(--color-bg-medium) !important;
+  color: var(--color-secondary) !important;
+  box-shadow: var(--shadow-glow-green) !important;
+}
+
+.help-button__icon {
+  font-size: 28px;
+}
+
+@media (max-width: 600px) {
+  .help-button-container {
+    bottom: var(--space-md);
+    right: var(--space-md);
+    left: var(--space-md);
+  }
+  .help-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+

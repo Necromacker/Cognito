@@ -1,0 +1,31 @@
+{
+  "name": "cognito",
+  "version": "1.0.0",
+  "description": "Cognito - A dementia care and cognitive engagement platform",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && node index.js",
+    "client": "cd client && npx vite --host",
+    "seed": "cd server && node seed.js",
+    "build": "cd client && npx vite build",
+    "migrate": "cd server && node migrate.js"
+  },
+  "keywords": [
+    "dementia",
+    "cognitive",
+    "care",
+    "memory"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@vitejs/plugin-react": "^6.3.0",
+    "axios": "^1.21.1",
+    "concurrently": "^10.0.7",
+    "gsap": "^3.15.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-router-dom": "^7.18.5",
+    "vite": "^8.3.8"
+  }
+}

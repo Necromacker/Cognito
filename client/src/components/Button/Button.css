@@ -1,0 +1,25 @@
+.custom-button {
+  user-select: none;
+  font-family: inherit;
+}
+
+.custom-button__icon {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.25em;
+}
+
+.custom-button__label {
+  display: inline-block;
+}
+
+/* Patient button override */
+.btn--patient {
+  min-height: var(--touch-lg);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  padding: var(--space-md) var(--space-2xl);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+}
+
