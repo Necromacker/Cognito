@@ -8,47 +8,51 @@
    ============================================================================= */
 
 :root {
-  /* ── Canvas & Backgrounds ── */
-  --color-bg-page:        #f3f2f7;
-  --color-bg-grid:        #e2e0ea;
-  --color-bg-card:        #ffffff;
-  --color-bg-dark:        #181528;
-  --color-bg-dark-card:   #211d33;
-  --color-bg-medium:      #f0eef5;
+  /* ── Canvas & Backgrounds (Warm Clinical Theme) ── */
+  --color-bg-page:        #F7F8F4;   /* Warm off-white */
+  --color-bg-grid:        #EAECE7;
+  --color-bg-card:        #FFFFFF;   /* Pure white */
+  --color-bg-dark:        #202C2A;   /* Dark charcoal */
+  --color-bg-dark-card:   #2A3836;
+  --color-bg-medium:      #EFF2EE;
 
-  /* ── Reference Accents ── */
-  --color-primary:        #ff2d78;   /* Pixel Picnic Hot Pink */
-  --color-primary-hover:  #e61e68;
-  --color-primary-light:  #ff5c9a;
-  --color-primary-bg:     rgba(255, 45, 120, 0.1);
+  /* ── Primary & Accent Colors ── */
+  --color-primary:        #234E43;   /* Forest green */
+  --color-primary-hover:  #1B3E35;
+  --color-primary-light:  #2F6759;
+  --color-primary-bg:     #E8F2EE;
 
-  --color-secondary:      #05c46b;   /* Pixel Picnic Mint Green */
-  --color-secondary-hover:#04a85b;
-  --color-secondary-bg:   rgba(5, 196, 107, 0.12);
+  --color-secondary:      #DCECE5;   /* Soft sage */
+  --color-secondary-hover:#CFE3DA;
+  --color-secondary-bg:   #EDF5F1;
 
-  --color-accent:         #ffd43f;   /* Pixel Picnic Post-It Yellow */
-  --color-accent-hover:   #f0c52f;
-  --color-accent-bg:      rgba(255, 212, 63, 0.15);
+  --color-accent:         #E9B75B;   /* Muted amber (Reminders) */
+  --color-accent-hover:   #DBA747;
+  --color-accent-bg:      #FDF8EE;
 
-  --color-info:           #0fbcf9;
-  --color-gentle:         #8c7ae6;
+  --color-alert:          #B74444;   /* Muted red (Alerts) */
+  --color-alert-hover:    #9F3838;
+  --color-alert-bg:       #FBF0F0;
+
+  --color-info:           #3B82F6;
+  --color-gentle:         #7C5CFC;
 
   /* ── Crisp Typography Colors ── */
-  --color-text-primary:   #181528;   /* Deep charcoal black */
-  --color-text-secondary: #5f5b6e;
-  --color-text-muted:     #8e8a9d;
-  --color-text-white:     #ffffff;
-  --color-text-on-dark:   #f5f4fa;
+  --color-text-primary:   #202C2A;   /* Dark charcoal */
+  --color-text-secondary: #52615B;   /* Slate grey */
+  --color-text-muted:     #7C8983;
+  --color-text-white:     #FFFFFF;
+  --color-text-on-dark:   #F7F8F4;
 
-  /* ── Pixel Borders & Hard Shadows ── */
-  --color-border:         #181528;   /* Solid black/deep charcoal stroke */
-  --color-border-light:   #d8d5e4;
-  --color-border-dark:    #000000;
+  /* ── Borders & Shadows ── */
+  --color-border:         #D5DFD9;   /* Light sage-grey */
+  --color-border-light:   #E4EBE7;
+  --color-border-dark:    #202C2A;
 
-  --shadow-retro:         3px 3px 0px #181528;
-  --shadow-retro-sm:      2px 2px 0px #181528;
-  --shadow-retro-lg:      5px 5px 0px #181528;
-  --shadow-retro-pink:    3px 3px 0px #ff2d78;
+  --shadow-retro:         0 8px 24px rgba(32, 44, 42, 0.08);
+  --shadow-retro-sm:      0 2px 8px rgba(32, 44, 42, 0.05);
+  --shadow-retro-lg:      0 16px 36px rgba(32, 44, 42, 0.12);
+  --shadow-retro-pink:    0 8px 24px rgba(35, 78, 67, 0.15);
 
   /* ── Refined Compact Typography ── */
   --font-family:          'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
