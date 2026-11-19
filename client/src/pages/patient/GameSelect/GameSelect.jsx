@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import { useLanguage } from '../../../context/LanguageContext';
 import HelpButton from '../../../components/HelpButton/HelpButton';
 import './GameSelect.css';
 
 export default function GameSelect() {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [filter, setFilter] = useState('all');
 
@@ -45,21 +47,21 @@ export default function GameSelect() {
               className={`filter-tab ${filter === 'all' ? 'filter-tab--active' : ''}`}
               onClick={() => setFilter('all')}
             >
-              ALL ({games.length})
+              {t('game_filter_all')} ({games.length})
             </button>
             <button
               type="button"
               className={`filter-tab ${filter === 'family' ? 'filter-tab--active' : ''}`}
               onClick={() => setFilter('family')}
             >
-              FAMILY & CONTENT (7)
+              {t('game_filter_family')} (7)
             </button>
             <button
               type="button"
               className={`filter-tab ${filter === 'brain' ? 'filter-tab--active' : ''}`}
               onClick={() => setFilter('brain')}
             >
-              MIND & COMFORT (7)
+              {t('game_filter_brain')} (7)
             </button>
           </div>
         </div>
@@ -79,7 +81,7 @@ export default function GameSelect() {
               <h3 className="tile-title">{game.title}</h3>
               <p className="tile-desc">{game.desc}</p>
               <button type="button" className="tile-play-btn">
-                PLAY ▶
+                {t('game_play_button')}
               </button>
             </div>
           ))}

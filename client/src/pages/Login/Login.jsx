@@ -6,7 +6,7 @@ import './Login.css';
 
 export default function Login() {
   const { login, pinLogin, register } = useAuth();
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const navigate = useNavigate();
 
   // Active Portal: 'patient', 'doctor', 'admin', 'caregiver'
@@ -19,105 +19,41 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Portal metadata matching uploaded images
-  const portalConfig = {
-    patient: {
+  // All Portals definition
+  const portals = [
+    {
+      id: 'patient',
       theme: 'theme-patient',
       badgeIcon: (
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
         </svg>
       ),
-      badgeText: 'Patient Access',
-      title: 'Cognitive Care for Dementia',
-      subtitle: 'Engaging games, meaningful memories and daily care support for a better quality of life.',
+      badgeTextKey: 'hero_badge_patient',
+      titleKey: 'hero_title_patient',
+      subtitleKey: 'hero_sub_patient',
       image: 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=800&q=80',
       imageAlt: 'Smiling elderly couple with tablet',
-      formTitle: 'Enter Patient PIN',
-      formSubtitle: 'Access your personalized cognitive games and memory activities.',
-      featuresTitle: 'Other Access',
-      features: [
-        { id: 'caregiver', title: 'Caregiver Login', desc: 'Monitor activity & daily care', badgeClass: 'badge-green', icon: 'user' },
-        { id: 'doctor', title: 'Doctor Login', desc: 'View progress & clinical reports', badgeClass: 'badge-purple', icon: 'doctor' },
-        { id: 'admin', title: 'Staff Login', desc: 'System administration', badgeClass: 'badge-amber', icon: 'gear' }
-      ],
+      formTitleKey: 'form_title_patient',
+      formSubtitleKey: 'form_sub_patient',
+      accessTitleKey: 'other_access_patient_title',
+      accessDescKey: 'other_access_patient_desc',
+      badgeClass: 'access-badge-teal',
+      icon: 'user',
       bottomPillars: [
-        { title: 'Cognitive Games', subtitle: 'Brain-stimulating activities', color: 'green', icon: 'game' },
-        { title: 'Personal Memories', subtitle: 'Relive people, places & moments', color: 'sage', icon: 'photo' },
-        { title: 'Progress Tracking', subtitle: 'Monitor cognitive engagement', color: 'teal', icon: 'chart' },
-        { title: 'Daily Reminders', subtitle: 'Medications & routines', color: 'amber', icon: 'bell' }
+        { titleKey: 'pillar_games_title', subKey: 'pillar_games_sub', color: 'green', icon: 'game' },
+        { titleKey: 'pillar_memories_title', subKey: 'pillar_memories_sub', color: 'sage', icon: 'photo' },
+        { titleKey: 'pillar_tracking_title', subKey: 'pillar_tracking_sub', color: 'teal', icon: 'chart' },
+        { titleKey: 'pillar_reminders_title', subKey: 'pillar_reminders_sub', color: 'amber', icon: 'bell' }
       ]
     },
-    doctor: {
-      theme: 'theme-doctor',
-      badgeIcon: (
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/>
-          <path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4"/>
-          <circle cx="20" cy="10" r="2"/>
-        </svg>
-      ),
-      badgeText: 'Doctor Portal',
-      title: 'Clinical Care & Cognitive Assessment',
-      subtitle: 'Monitor patients, review cognitive progress, analyze reports and manage care plans effectively.',
-      image: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=800&q=80',
-      imageAlt: 'Doctor assisting elderly patient with a digital tablet',
-      formTitle: 'Doctor Login',
-      formSubtitle: 'Access patient records, assessment reports and clinical insights.',
-      submitButtonText: 'Login to Doctor Portal',
-      demoEmail: 'doctor@demo.com',
-      demoPassword: 'demo1234',
-      featuresTitle: 'Doctor Features',
-      features: [
-        { id: 'pat_mgmt', title: 'Patient Management', desc: 'View and manage patient profiles', badgeClass: 'badge-purple', icon: 'user' },
-        { id: 'cog_rep', title: 'Cognitive Reports', desc: 'Track assessment results & trends', badgeClass: 'badge-purple-deep', icon: 'chart' },
-        { id: 'clin_notes', title: 'Clinical Notes', desc: 'Add observations and recommendations', badgeClass: 'badge-amber', icon: 'note' },
-        { id: 'care_plan', title: 'Care Plan', desc: 'Update therapy and activity plans', badgeClass: 'badge-blue', icon: 'calendar' }
-      ],
-      bottomPillars: [
-        { title: 'Cognitive Assessments', subtitle: 'Evaluate memory, attention & more', color: 'purple', icon: 'brain' },
-        { title: 'Progress Analysis', subtitle: 'Track improvement over time', color: 'purple-deep', icon: 'chart' },
-        { title: 'Care Coordination', subtitle: 'Collaborate with caregivers & family', color: 'blue', icon: 'users' },
-        { title: 'Secure Records', subtitle: 'HIPAA compliant & data protected', color: 'indigo', icon: 'shield' }
-      ]
-    },
-    admin: {
-      theme: 'theme-admin',
-      badgeIcon: (
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
-          <circle cx="12" cy="12" r="3"/>
-        </svg>
-      ),
-      badgeText: 'Admin Portal',
-      title: 'System Management & Control',
-      subtitle: 'Manage users, modules, content and overall platform operations for Cognito Care.',
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
-      imageAlt: 'Modern laptop with analytical dashboard and charts',
-      formTitle: 'Admin Login',
-      formSubtitle: 'Access system controls, user management and platform settings.',
-      submitButtonText: 'Login to Admin Portal',
-      demoEmail: 'admin@demo.com',
-      demoPassword: 'demo1234',
-      featuresTitle: 'Admin Features',
-      features: [
-        { id: 'usr_mgmt', title: 'User Management', desc: 'Add, update or deactivate users', badgeClass: 'badge-blue', icon: 'user' },
-        { id: 'mod_mgmt', title: 'Module Management', desc: 'Enable, disable or configure games', badgeClass: 'badge-purple-deep', icon: 'layers' },
-        { id: 'sys_rep', title: 'System Reports', desc: 'View usage and performance analytics', badgeClass: 'badge-teal', icon: 'chart' },
-        { id: 'plat_set', title: 'Platform Settings', desc: 'Manage system, security and data', badgeClass: 'badge-amber', icon: 'gear' }
-      ],
-      bottomPillars: [
-        { title: 'Role Control', subtitle: 'Manage patient, caregiver & doctor access', color: 'blue', icon: 'shield' },
-        { title: 'Data Management', subtitle: 'Monitor and maintain platform data', color: 'teal', icon: 'database' },
-        { title: 'Usage Analytics', subtitle: 'Track system activity & engagement', color: 'cyan', icon: 'chart' },
-        { title: 'Backup & Security', subtitle: 'Ensure data safety and availability', color: 'indigo', icon: 'cloud' }
-      ]
-    },
-    caregiver: {
+    {
+      id: 'caregiver',
       theme: 'theme-caregiver',
       badgeIcon: (
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -126,33 +62,94 @@ export default function Login() {
           <polyline points="16 11 18 13 22 9"/>
         </svg>
       ),
-      badgeText: 'Caregiver Portal',
-      title: 'Caregiver Coordination & Monitoring',
-      subtitle: 'Track daily wellness, hydration, medications, and review cognitive engagement.',
+      badgeTextKey: 'hero_badge_caregiver',
+      titleKey: 'hero_title_caregiver',
+      subtitleKey: 'hero_sub_caregiver',
       image: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=800&q=80',
       imageAlt: 'Caregiver assisting elderly resident',
-      formTitle: 'Caregiver Login',
-      formSubtitle: 'Access care tracking, patient memory albums and reminder schedules.',
-      submitButtonText: 'Login to Caregiver Portal',
+      formTitleKey: 'form_title_caregiver',
+      formSubtitleKey: 'form_sub_caregiver',
+      submitButtonKey: 'btn_login_caregiver',
       demoEmail: 'caretaker@demo.com',
       demoPassword: 'demo1234',
-      featuresTitle: 'Caregiver Features',
-      features: [
-        { id: 'daily_well', title: 'Daily Wellness Logs', desc: 'Track hydration, meals & sleep', badgeClass: 'badge-green', icon: 'note' },
-        { id: 'mem_lib', title: 'Memory Library', desc: 'Upload family photos & voice clips', badgeClass: 'badge-sage', icon: 'photo' },
-        { id: 'med_rem', title: 'Medication Reminders', desc: 'Keep track of daily medications', badgeClass: 'badge-amber', icon: 'bell' },
-        { id: 'game_tune', title: 'Game Customization', desc: 'Adjust difficulty & enable games', badgeClass: 'badge-teal', icon: 'gear' }
-      ],
+      accessTitleKey: 'other_access_caregiver_title',
+      accessDescKey: 'other_access_caregiver_desc',
+      badgeClass: 'access-badge-green',
+      icon: 'user',
       bottomPillars: [
-        { title: 'Hydration & Nutrition', subtitle: 'Interactive daily water tracker', color: 'teal', icon: 'chart' },
-        { title: 'Medication Adherence', subtitle: 'Daily morning, noon & night logs', color: 'amber', icon: 'bell' },
-        { title: 'Memory Reminiscence', subtitle: 'Personalized people & song media', color: 'sage', icon: 'photo' },
-        { title: 'Cognitive Score', subtitle: 'Automated performance trend score', color: 'green', icon: 'brain' }
+        { titleKey: 'pillar_games_title', subKey: 'pillar_games_sub', color: 'green', icon: 'game' },
+        { titleKey: 'pillar_memories_title', subKey: 'pillar_memories_sub', color: 'sage', icon: 'photo' },
+        { titleKey: 'pillar_tracking_title', subKey: 'pillar_tracking_sub', color: 'teal', icon: 'chart' },
+        { titleKey: 'pillar_reminders_title', subKey: 'pillar_reminders_sub', color: 'amber', icon: 'bell' }
+      ]
+    },
+    {
+      id: 'doctor',
+      theme: 'theme-doctor',
+      badgeIcon: (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/>
+          <path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4"/>
+          <circle cx="20" cy="10" r="2"/>
+        </svg>
+      ),
+      badgeTextKey: 'hero_badge_doctor',
+      titleKey: 'hero_title_doctor',
+      subtitleKey: 'hero_sub_doctor',
+      image: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=800&q=80',
+      imageAlt: 'Doctor assisting elderly patient with a digital tablet',
+      formTitleKey: 'form_title_doctor',
+      formSubtitleKey: 'form_sub_doctor',
+      submitButtonKey: 'btn_login_doctor',
+      demoEmail: 'doctor@demo.com',
+      demoPassword: 'demo1234',
+      accessTitleKey: 'other_access_doctor_title',
+      accessDescKey: 'other_access_doctor_desc',
+      badgeClass: 'access-badge-purple',
+      icon: 'doctor',
+      bottomPillars: [
+        { titleKey: 'pillar_doc_eval_title', subKey: 'pillar_doc_eval_sub', color: 'purple', icon: 'brain' },
+        { titleKey: 'pillar_doc_analysis_title', subKey: 'pillar_doc_analysis_sub', color: 'purple-deep', icon: 'chart' },
+        { titleKey: 'pillar_doc_coord_title', subKey: 'pillar_doc_coord_sub', color: 'blue', icon: 'users' },
+        { titleKey: 'pillar_doc_secure_title', subKey: 'pillar_doc_secure_sub', color: 'indigo', icon: 'shield' }
+      ]
+    },
+    {
+      id: 'admin',
+      theme: 'theme-admin',
+      badgeIcon: (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+      ),
+      badgeTextKey: 'hero_badge_admin',
+      titleKey: 'hero_title_admin',
+      subtitleKey: 'hero_sub_admin',
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
+      imageAlt: 'Modern laptop with analytical dashboard and charts',
+      formTitleKey: 'form_title_admin',
+      formSubtitleKey: 'form_sub_admin',
+      submitButtonKey: 'btn_login_admin',
+      demoEmail: 'admin@demo.com',
+      demoPassword: 'demo1234',
+      accessTitleKey: 'other_access_admin_title',
+      accessDescKey: 'other_access_admin_desc',
+      badgeClass: 'access-badge-amber',
+      icon: 'gear',
+      bottomPillars: [
+        { titleKey: 'pillar_admin_role_title', subKey: 'pillar_admin_role_sub', color: 'blue', icon: 'shield' },
+        { titleKey: 'pillar_admin_data_title', subKey: 'pillar_admin_data_sub', color: 'teal', icon: 'database' },
+        { titleKey: 'pillar_admin_usage_title', subKey: 'pillar_admin_usage_sub', color: 'cyan', icon: 'chart' },
+        { titleKey: 'pillar_admin_backup_title', subKey: 'pillar_admin_backup_sub', color: 'indigo', icon: 'cloud' }
       ]
     }
-  };
+  ];
 
-  const curr = portalConfig[activePortal];
+  const curr = portals.find(p => p.id === activePortal) || portals[0];
+
+  // Other access items for the right card: ONLY the other 3 portals across ALL login pages!
+  const otherAccessItems = portals.filter(p => p.id !== activePortal);
 
   // PIN Keypad Handlers
   const handlePinDigit = (digit) => {
@@ -170,7 +167,7 @@ export default function Login() {
   const handlePatientSubmit = async (e) => {
     if (e) e.preventDefault();
     if (pin.length !== 4) {
-      setError('Please enter your 4-digit PIN');
+      setError(t('pin_error_required'));
       return;
     }
     setError('');
@@ -179,7 +176,7 @@ export default function Login() {
       await pinLogin(pin);
       navigate('/patient');
     } catch (err) {
-      setError(err.response?.data?.error || 'Incorrect PIN. Try demo PIN: 1234');
+      setError(err.response?.data?.error || t('pin_error_incorrect'));
     } finally {
       setLoading(false);
     }
@@ -198,7 +195,7 @@ export default function Login() {
       }
       navigate(activePortal === 'doctor' ? '/doctor' : (activePortal === 'admin' ? '/admin' : '/caretaker'));
     } catch (err) {
-      setError(err.response?.data?.error || 'Authentication failed. Please verify credentials.');
+      setError(err.response?.data?.error || t('auth_error_generic'));
     } finally {
       setLoading(false);
     }
@@ -208,10 +205,12 @@ export default function Login() {
     setActivePortal(newPortal);
     setError('');
     setIsRegistering(false);
-    const target = portalConfig[newPortal];
-    if (target.demoEmail) {
+    const target = portals.find(p => p.id === newPortal);
+    if (target?.demoEmail) {
       setEmail(target.demoEmail);
       setPassword(target.demoPassword);
+    } else {
+      setPin('');
     }
   };
 
@@ -228,7 +227,7 @@ export default function Login() {
     }
   };
 
-  // Icon Helper for Badges
+  // Icon Helper for Badges & Pillars
   const renderIcon = (type) => {
     switch (type) {
       case 'user':
@@ -239,12 +238,22 @@ export default function Login() {
         return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>;
       case 'chart':
         return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>;
-      case 'note':
-        return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>;
-      case 'calendar':
-        return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>;
-      case 'layers':
-        return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>;
+      case 'game':
+        return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="6 12 10 8 10 11 14 11 14 8 18 12 14 16 14 13 10 13 10 16 6 12"/></svg>;
+      case 'photo':
+        return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>;
+      case 'bell':
+        return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>;
+      case 'brain':
+        return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-2.04z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-2.04z"/></svg>;
+      case 'users':
+        return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>;
+      case 'shield':
+        return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>;
+      case 'database':
+        return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>;
+      case 'cloud':
+        return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>;
       default:
         return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/></svg>;
     }
@@ -252,150 +261,140 @@ export default function Login() {
 
   return (
     <div className={`login-screen ${curr.theme}`}>
-      {/* Background Soft Gradients */}
-      <div className="bg-blob bg-blob--top-left"></div>
-      <div className="bg-blob bg-blob--bottom-right"></div>
+      <div className="bg-blob bg-blob--top-left" aria-hidden="true"></div>
+      <div className="bg-blob bg-blob--bottom-right" aria-hidden="true"></div>
 
       <div className="login-main-container">
-        
-        {/* Top 3-Column Section */}
+
+        {/* 3-Column Top Row matching spec and Figma screenshots */}
         <div className="login-hero-row">
-          
-          {/* Column 1: Hero Pitch & Picture (dynamically updates per portal) */}
+
+          {/* Column 1: Left Hero Description & Image */}
           <div className="hero-left-column">
             <div className="portal-badge-pill">
               {curr.badgeIcon}
-              <span>{curr.badgeText}</span>
+              <span>{t(curr.badgeTextKey)}</span>
             </div>
-
-            <h1 className="hero-main-title">
-              {curr.title}
-            </h1>
-            <p className="hero-main-subtitle">
-              {curr.subtitle}
-            </p>
+            <h1 className="hero-main-title">{t(curr.titleKey)}</h1>
+            <p className="hero-main-subtitle">{t(curr.subtitleKey)}</p>
 
             <div className="hero-image-wrapper">
               <img
                 src={curr.image}
                 alt={curr.imageAlt}
                 className="hero-couple-img"
+                loading="eager"
               />
             </div>
           </div>
 
-          {/* Column 2: Center Interactive Card (Patient PIN or Portal Login) */}
+          {/* Column 2: Center Interactive Card */}
           <div className="login-center-column">
             {activePortal === 'patient' ? (
+              /* Patient PIN Keypad Card */
               <div className="patient-pin-card">
-                <div className="patient-access-badge">
+                <span className="patient-access-badge">
                   {curr.badgeIcon}
-                  <span>{curr.badgeText}</span>
-                </div>
+                  <span>{t(curr.badgeTextKey)}</span>
+                </span>
+                <h2 className="pin-card-title">{t(curr.formTitleKey)}</h2>
+                <p className="pin-card-subtitle">{t(curr.formSubtitleKey)}</p>
 
-                <h2 className="pin-card-title">{curr.formTitle}</h2>
-                <p className="pin-card-subtitle">{curr.formSubtitle}</p>
+                {error && <div className="card-error-banner" role="alert">{error}</div>}
 
-                {error && <div className="card-error-banner">{error}</div>}
-
-                {/* 4 PIN Slots */}
-                <div className="pin-boxes-container">
-                  {[0, 1, 2, 3].map(idx => (
+                {/* 4-Box PIN Display */}
+                <div className="pin-boxes-container" aria-label="PIN entry">
+                  {[0, 1, 2, 3].map(index => (
                     <div
-                      key={idx}
-                      className={`pin-box ${pin.length > idx ? 'pin-box--filled' : ''} ${pin.length === idx ? 'pin-box--active' : ''}`}
+                      key={index}
+                      className={`pin-box ${pin.length > index ? 'pin-box--filled' : ''} ${pin.length === index ? 'pin-box--active' : ''}`}
                     >
-                      {pin.length > idx ? '●' : '—'}
+                      {pin.length > index ? '●' : '—'}
                     </div>
                   ))}
                 </div>
 
-                {/* 3x4 Keypad */}
+                {/* Keypad Grid */}
                 <div className="pin-keypad-grid">
-                  {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map(digit => (
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
                     <button
-                      key={digit}
+                      key={num}
                       type="button"
                       className="keypad-key"
-                      onClick={() => handlePinDigit(digit)}
+                      onClick={() => handlePinDigit(num.toString())}
+                      disabled={loading || pin.length >= 4}
                     >
-                      {digit}
+                      {num}
                     </button>
                   ))}
                   
+                  {/* Delete button */}
                   <button
                     type="button"
                     className="keypad-key keypad-key--action"
                     onClick={handlePinBackspace}
-                    title="Delete"
+                    disabled={loading || pin.length === 0}
+                    aria-label="Delete last digit"
                   >
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="m10 15 5-5m0 5-5-5"/>
-                      <path d="M7 21h12a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H7a2 2 0 0 0-1.75 1.03L1.5 12l3.75 7.97A2 2 0 0 0 7 21z"/>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="m10 15 5-6M15 15l-5-6M18 6H8a2 2 0 0 0-1.6.8L2 12l4.4 5.2A2 2 0 0 0 8 18h10a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2z"/>
                     </svg>
                   </button>
 
+                  {/* Zero */}
                   <button
                     type="button"
                     className="keypad-key"
                     onClick={() => handlePinDigit('0')}
+                    disabled={loading || pin.length >= 4}
                   >
                     0
                   </button>
 
+                  {/* Enter button */}
                   <button
                     type="button"
                     className="keypad-key keypad-key--enter"
-                    onClick={handlePatientSubmit}
-                    disabled={pin.length !== 4 || loading}
+                    onClick={() => handlePatientSubmit()}
+                    disabled={loading || pin.length !== 4}
                   >
-                    <span>{loading ? '...' : 'Enter'}</span>
+                    <span>{t('btn_enter')}</span>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="5" y1="12" x2="19" y2="12"/>
-                      <polyline points="12 5 19 12 12 19"/>
+                      <polyline points="9 18 15 12 9 6"/>
                     </svg>
                   </button>
                 </div>
 
+                {/* Demo Helper Button */}
                 <div className="quick-demo-row">
                   <button type="button" className="quick-demo-pill" onClick={fillDemoPin}>
-                    Fill Demo PIN (1234)
+                    {t('demo_pin_hint')}
                   </button>
                 </div>
               </div>
             ) : (
-              /* Portal Staff Login (Doctor / Admin / Caregiver matching reference images) */
+              /* Doctor, Admin & Caregiver Staff Login Card */
               <div className="patient-pin-card staff-login-card">
                 <div className="portal-top-badge-row">
-                  <button
-                    type="button"
-                    className="back-to-pin-btn"
-                    onClick={() => switchPortal('patient')}
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="19" y1="12" x2="5" y2="12"/>
-                      <polyline points="12 19 5 12 12 5"/>
-                    </svg>
-                    <span>Patient Access</span>
-                  </button>
-                  <button type="button" className="quick-fill-demo-btn" onClick={fillStaffDemo}>
-                    Use Demo Credentials
-                  </button>
+                  <div className="portal-icon-box">
+                    {curr.badgeIcon}
+                  </div>
+                  {curr.demoEmail && (
+                    <button type="button" className="quick-fill-demo-btn" onClick={fillStaffDemo}>
+                      {t('demo_creds_hint')}
+                    </button>
+                  )}
                 </div>
 
-                <div className="portal-icon-box">
-                  {curr.badgeIcon}
-                </div>
+                <h2 className="pin-card-title">{t(curr.formTitleKey)}</h2>
+                <p className="pin-card-subtitle">{t(curr.formSubtitleKey)}</p>
 
-                <h2 className="pin-card-title">{curr.formTitle}</h2>
-                <p className="pin-card-subtitle">{curr.formSubtitle}</p>
-
-                {error && <div className="card-error-banner">{error}</div>}
+                {error && <div className="card-error-banner" role="alert">{error}</div>}
 
                 <form onSubmit={handleStaffSubmit} className="staff-login-form">
                   {isRegistering && (
                     <div className="form-group-clean">
-                      <label>Full Name</label>
+                      <label>{t('label_name')}</label>
                       <input
                         type="text"
                         required
@@ -408,7 +407,7 @@ export default function Login() {
                   )}
 
                   <div className="form-group-clean">
-                    <label>Email / Username</label>
+                    <label>{t('label_email')}</label>
                     <div className="input-with-icon">
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <rect width="20" height="16" x="2" y="4" rx="2"/>
@@ -426,7 +425,7 @@ export default function Login() {
                   </div>
 
                   <div className="form-group-clean">
-                    <label>Password</label>
+                    <label>{t('label_password')}</label>
                     <div className="input-with-icon">
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
@@ -443,13 +442,27 @@ export default function Login() {
                     </div>
                   </div>
 
+                  <div className="form-options-row">
+                    <label className="checkbox-clean">
+                      <input
+                        type="checkbox"
+                        checked={rememberMe}
+                        onChange={e => setRememberMe(e.target.checked)}
+                      />
+                      <span>{t('remember_me')}</span>
+                    </label>
+                    <a href="#forgot" className="forgot-link" onClick={(e) => { e.preventDefault(); alert('Demo credentials: ' + (curr.demoEmail || 'doctor@demo.com')); }}>
+                      {t('forgot_password')}
+                    </a>
+                  </div>
+
                   <button type="submit" className="btn-staff-submit" disabled={loading}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
                       <polyline points="10 17 15 12 10 7"/>
                       <line x1="15" x2="3" y1="12" y2="12"/>
                     </svg>
-                    <span>{loading ? 'Processing...' : (isRegistering ? 'Register & Sign In' : (curr.submitButtonText || 'Login to Portal'))}</span>
+                    <span>{loading ? t('btn_processing') : (isRegistering ? t('btn_register_signin') : (t(curr.submitButtonKey) || t('sign_in')))}</span>
                   </button>
 
                   <div className="staff-toggle-row">
@@ -458,7 +471,7 @@ export default function Login() {
                       className="text-toggle-btn"
                       onClick={() => { setIsRegistering(!isRegistering); setError(''); }}
                     >
-                      {isRegistering ? 'Already registered? Sign In' : 'Need an account? Register'}
+                      {isRegistering ? t('toggle_have_account') : t('toggle_need_account')}
                     </button>
                   </div>
                 </form>
@@ -466,86 +479,50 @@ export default function Login() {
             )}
           </div>
 
-          {/* Column 3: Features / Switcher Sidebar matching Images */}
+          {/* Column 3: ONLY Other Access Sidebar across ALL Login Portals */}
           <div className="login-right-column">
             <div className="other-access-card">
               <div className="other-access-header">
                 <div className="other-access-icon">
-                  {curr.badgeIcon}
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                  </svg>
                 </div>
-                <h3 className="other-access-title">{curr.featuresTitle}</h3>
+                <h3 className="other-access-title">{t('other_access_title')}</h3>
               </div>
 
+              {/* Show the remaining 3 portals cleanly and interactively */}
               <div className="access-options-list">
-                {activePortal === 'patient' ? (
-                  /* When on patient, clicking these switches portal */
-                  curr.features.map(item => (
-                    <button
-                      key={item.id}
-                      type="button"
-                      className="access-item-card"
-                      onClick={() => switchPortal(item.id)}
-                    >
-                      <div className={`access-badge access-${item.badgeClass}`}>
-                        {renderIcon(item.icon)}
-                      </div>
-                      <div className="access-text-group">
-                        <span className="access-name">{item.title}</span>
-                        <span className="access-desc">{item.desc}</span>
-                      </div>
-                      <div className="access-chevron">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="9 18 15 12 9 6"/>
-                        </svg>
-                      </div>
-                    </button>
-                  ))
-                ) : (
-                  /* When on Doctor/Admin/Caregiver, shows feature items matching screenshot */
-                  <>
-                    {curr.features.map(item => (
-                      <div key={item.id} className="access-item-card access-item-card--feature">
-                        <div className={`access-badge access-${item.badgeClass}`}>
-                          {renderIcon(item.icon)}
-                        </div>
-                        <div className="access-text-group">
-                          <span className="access-name">{item.title}</span>
-                          <span className="access-desc">{item.desc}</span>
-                        </div>
-                        <div className="access-chevron">
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <polyline points="9 18 15 12 9 6"/>
-                          </svg>
-                        </div>
-                      </div>
-                    ))}
-
-                    {/* Portal Switcher Buttons at bottom of card */}
-                    <div className="portal-quick-switch-tabs">
-                      <span className="switch-label">Switch Access:</span>
-                      <div className="switch-buttons-row">
-                        <button type="button" className={`switch-pill ${activePortal === 'patient' ? 'switch-pill--active' : ''}`} onClick={() => switchPortal('patient')}>
-                          Patient
-                        </button>
-                        <button type="button" className={`switch-pill ${activePortal === 'caregiver' ? 'switch-pill--active' : ''}`} onClick={() => switchPortal('caregiver')}>
-                          Caregiver
-                        </button>
-                        <button type="button" className={`switch-pill ${activePortal === 'doctor' ? 'switch-pill--active' : ''}`} onClick={() => switchPortal('doctor')}>
-                          Doctor
-                        </button>
-                        <button type="button" className={`switch-pill ${activePortal === 'admin' ? 'switch-pill--active' : ''}`} onClick={() => switchPortal('admin')}>
-                          Admin
-                        </button>
-                      </div>
+                {otherAccessItems.map(item => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className="access-item-card"
+                    onClick={() => switchPortal(item.id)}
+                  >
+                    <div className={`access-badge ${item.badgeClass}`}>
+                      {renderIcon(item.icon)}
                     </div>
-                  </>
-                )}
+                    <div className="access-text-group">
+                      <span className="access-name">{t(item.accessTitleKey)}</span>
+                      <span className="access-desc">{t(item.accessDescKey)}</span>
+                    </div>
+                    <div className="access-chevron">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="9 18 15 12 9 6"/>
+                      </svg>
+                    </div>
+                  </button>
+                ))}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom 4-Pillar Features Bar matching uploaded images */}
+        {/* Bottom 4-Pillar Features Bar */}
         <div className="features-bottom-pill">
           {curr.bottomPillars.map((pill, i) => (
             <div key={i} className="feature-item">
@@ -553,8 +530,8 @@ export default function Login() {
                 {renderIcon(pill.icon)}
               </div>
               <div className="feature-item__content">
-                <span className="feature-item__title">{pill.title}</span>
-                <span className="feature-item__subtitle">{pill.subtitle}</span>
+                <span className="feature-item__title">{t(pill.titleKey)}</span>
+                <span className="feature-item__subtitle">{t(pill.subKey)}</span>
               </div>
             </div>
           ))}

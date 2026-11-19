@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import api from '../../api';
 import './MoodCheck.css';
 
 export default function MoodCheck({ patientId, onMoodSelected }) {
+  const { t } = useLanguage();
   const [selectedMood, setSelectedMood] = useState(null);
   const [savedMessage, setSavedMessage] = useState(false);
 
@@ -29,8 +31,8 @@ export default function MoodCheck({ patientId, onMoodSelected }) {
   return (
     <div className="mood-check-card card" role="region" aria-label="Daily mood check">
       <div className="mood-check__top">
-        <span className="label-caps">DAILY CHECK</span>
-        <span className="mood-check__title">HOW ARE YOU FEELING TODAY?</span>
+        <span className="label-caps">{t('daily_check_label')}</span>
+        <span className="mood-check__title">{t('mood_check_question')}</span>
       </div>
       
       <div className="mood-check__options">
@@ -40,7 +42,7 @@ export default function MoodCheck({ patientId, onMoodSelected }) {
           onClick={() => handleSelect('happy')}
         >
           <span className="mood-btn__indicator mood-btn__indicator--green"></span>
-          <span className="mood-btn__label">GOOD / CHEERFUL</span>
+          <span className="mood-btn__label">{t('mood_good_cheerful')}</span>
         </button>
 
         <button
@@ -49,7 +51,7 @@ export default function MoodCheck({ patientId, onMoodSelected }) {
           onClick={() => handleSelect('neutral')}
         >
           <span className="mood-btn__indicator mood-btn__indicator--yellow"></span>
-          <span className="mood-btn__label">PEACEFUL / CALM</span>
+          <span className="mood-btn__label">{t('mood_peaceful_calm')}</span>
         </button>
 
         <button
@@ -58,13 +60,13 @@ export default function MoodCheck({ patientId, onMoodSelected }) {
           onClick={() => handleSelect('sad')}
         >
           <span className="mood-btn__indicator mood-btn__indicator--pink"></span>
-          <span className="mood-btn__label">TIRED / A BIT LOW</span>
+          <span className="mood-btn__label">{t('mood_tired_low')}</span>
         </button>
       </div>
 
       {savedMessage && (
         <div className="mood-check__feedback" role="status">
-          ✓ Mood recorded gently.
+          {t('mood_recorded_feedback')}
         </div>
       )}
     </div>

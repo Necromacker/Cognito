@@ -39,12 +39,12 @@ export default function PatientHome() {
         {/* Compact Clean Header */}
         <header className="patient-home__hero card">
           <div className="patient-hero-top">
-            <span className="badge badge--pink">PATIENT ACTIVE</span>
-            <span className="badge badge--green">STAGE: {user?.stage?.toUpperCase() || 'EARLY'}</span>
+            <span className="badge badge--pink">{t('patient_active_badge')}</span>
+            <span className="badge badge--green">{t('patient_stage_badge')}: {user?.stage?.toUpperCase() || 'EARLY'}</span>
           </div>
 
           <h1 className="patient-home__greeting">
-            Welcome, <span className="patient-name-highlight">{user?.name || 'Ramesh'}</span>
+            {t('patient_welcome')}, <span className="patient-name-highlight">{user?.name || 'Ramesh'}</span>
           </h1>
 
           <div className="patient-stars-display">
@@ -65,12 +65,12 @@ export default function PatientHome() {
             role="button"
             tabIndex={0}
           >
-            <div className="patient-action__tag">MODULE 01</div>
-            <h2 className="patient-action__title">GENTLE GAMES</h2>
+            <div className="patient-action__tag">{t('module_01_tag')}</div>
+            <h2 className="patient-action__title">{t('module_01_title')}</h2>
             <p className="patient-action__desc">
-              Pictures, sounds and calming memory activities.
+              {t('module_01_desc')}
             </p>
-            <div className="patient-action__btn">PLAY ▶</div>
+            <div className="patient-action__btn">{t('module_01_play')}</div>
           </div>
 
           <div
@@ -79,12 +79,12 @@ export default function PatientHome() {
             role="button"
             tabIndex={0}
           >
-            <div className="patient-action__tag">MODULE 02</div>
-            <h2 className="patient-action__title">MY MEMORIES</h2>
+            <div className="patient-action__tag">{t('module_02_tag')}</div>
+            <h2 className="patient-action__title">{t('module_02_title')}</h2>
             <p className="patient-action__desc">
-              Family photos, favourite places, and life milestones.
+              {t('module_02_desc')}
             </p>
-            <div className="patient-action__btn">OPEN ▶</div>
+            <div className="patient-action__btn">{t('module_02_open')}</div>
           </div>
         </section>
 

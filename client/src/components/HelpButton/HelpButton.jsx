@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import api from '../../api';
 import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
 import './HelpButton.css';
 
 export default function HelpButton() {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -38,7 +40,7 @@ export default function HelpButton() {
       >
         <span className="help-button__badge">!</span>
         <span className="help-button__text">
-          {sent ? 'CARETAKER ALERTED' : 'REQUEST HELP'}
+          {sent ? t('help_sent') : t('help_button')}
         </span>
       </button>
     </div>

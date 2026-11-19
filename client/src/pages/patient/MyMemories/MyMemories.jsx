@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import { useLanguage } from '../../../context/LanguageContext';
 import HelpButton from '../../../components/HelpButton/HelpButton';
 import Modal from '../../../components/Modal/Modal';
 import api from '../../../api';
@@ -8,6 +9,7 @@ import './MyMemories.css';
 
 export default function MyMemories() {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState('people');
@@ -45,30 +47,30 @@ export default function MyMemories() {
               className={`mem-tab ${activeTab === 'people' ? 'mem-tab--active' : ''}`}
               onClick={() => setActiveTab('people')}
             >
-              PEOPLE ({people.length})
+              {t('mem_tab_people')} ({people.length})
             </button>
             <button
               type="button"
               className={`mem-tab ${activeTab === 'places' ? 'mem-tab--active' : ''}`}
               onClick={() => setActiveTab('places')}
             >
-              PLACES ({places.length})
+              {t('mem_tab_places')} ({places.length})
             </button>
             <button
               type="button"
               className={`mem-tab ${activeTab === 'events' ? 'mem-tab--active' : ''}`}
               onClick={() => setActiveTab('events')}
             >
-              TIMELINE ({events.length})
+              {t('mem_tab_timeline')} ({events.length})
             </button>
           </div>
 
           <button type="button" className="mem-home-btn" onClick={() => navigate('/patient')}>
-            HOME ➔
+            {t('mem_btn_home')}
           </button>
         </div>
 
-        {loading && <div className="loading-note">Loading memories...</div>}
+        {loading && <div className="loading-note">{t('mem_loading')}</div>}
 
         {!loading && activeTab === 'people' && (
           <div className="memories-grid">
