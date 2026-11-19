@@ -17,6 +17,8 @@ export default function ContentLibrary() {
   const [description, setDescription] = useState('');
   const [year, setYear] = useState('');
   const [photoUrl, setPhotoUrl] = useState('');
+  const [voiceUrl, setVoiceUrl] = useState('');
+  const [uploadingVoice, setUploadingVoice] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -61,13 +63,31 @@ export default function ContentLibrary() {
     }
   };
 
+  const handleVoiceUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append('file', file);
+    setUploadingVoice(true);
+    try {
+      const res = await api.post(`/content/upload/${patientId}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      setVoiceUrl(res.data.url);
+    } catch (err) {
+      alert('Voice upload failed. Please try an mp3, wav or m4a file.');
+    } finally {
+      setUploadingVoice(false);
+    }
+  };
+
   const handleSave = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
       if (activeTab === 'people') {
         await api.post(`/content/people/${patientId}`, {
-          name, relationship, photo_url: photoUrl, notes: description
+          name, relationship, photo_url: photoUrl, voice_url: voiceUrl, notes: description
         });
       } else if (activeTab === 'places') {
         await api.post(`/content/places/${patientId}`, {
@@ -75,7 +95,7 @@ export default function ContentLibrary() {
         });
       } else if (activeTab === 'songs') {
         await api.post(`/content/songs/${patientId}`, {
-          title: name, artist: relationship, audio_url: photoUrl
+          title: name, artist: relationship, audio_url: photoUrl || voiceUrl
         });
       } else {
         await api.post(`/content/life-events/${patientId}`, {
@@ -87,6 +107,7 @@ export default function ContentLibrary() {
       setRelationship('');
       setDescription('');
       setPhotoUrl('');
+      setVoiceUrl('');
       setYear('');
       loadItems();
     } catch (err) {
@@ -226,7 +247,7 @@ export default function ContentLibrary() {
             )}
 
             <div className="form-group">
-              <label className="form-label">Image URL</label>
+              <label className="form-label">Photo Image URL</label>
               <input
                 type="url"
                 className="form-input"
@@ -235,6 +256,27 @@ export default function ContentLibrary() {
                 placeholder="https://images.unsplash.com/..."
               />
             </div>
+
+            {activeTab === 'people' && (
+              <div className="form-group">
+                <label className="form-label">Voice Recording (Audio for Voice Recognition Game)</label>
+                <div className="voice-upload-field">
+                  <input
+                    type="file"
+                    accept="audio/*"
+                    onChange={handleVoiceUpload}
+                    className="form-input-file"
+                  />
+                  {uploadingVoice && <span className="upload-progress-text">Uploading audio...</span>}
+                  {voiceUrl && (
+                    <div className="voice-preview-row">
+                      <audio controls src={voiceUrl} style={{ height: '36px', marginTop: '6px' }} />
+                      <span className="voice-ready-tag">✓ Voice clip ready</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
 
             <div className="form-group">
               <label className="form-label">Memory Notes</label>

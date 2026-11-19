@@ -249,6 +249,10 @@ function runMigrations() {
     CREATE INDEX IF NOT EXISTS idx_mood_patient ON mood_checks(patient_id);
   `);
 
+  // Safe column additions for tracker enhancements
+  try { db.exec(`ALTER TABLE daily_logs ADD COLUMN water_glasses INTEGER DEFAULT 0;`); } catch (e) {}
+  try { db.exec(`ALTER TABLE daily_logs ADD COLUMN meds_detail TEXT DEFAULT '{"morning":false,"noon":false,"night":false}';`); } catch (e) {}
+
   console.log('✅ Database migrations complete');
   db.close();
 }

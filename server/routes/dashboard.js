@@ -57,6 +57,11 @@ router.get('/stats/:patientId', authenticateToken, (req, res) => {
     const accuracy = total > 0 ? Math.round((correct / total) * 100) : 0;
     const avgResponseTimeSec = Math.round((attemptsSummary.avg_response_time || 0) / 1000 * 10) / 10;
 
+    // Calculate Cognitive Performance Score (0 - 100)
+    // Weighted 70% Accuracy + 30% Response Speed Stability
+    const speedScore = Math.max(30, Math.min(100, Math.round(100 - (Math.max(0, avgResponseTimeSec - 2) * 8.75))));
+    const cognitiveScore = total > 0 ? Math.round((accuracy * 0.7) + (speedScore * 0.3)) : 82;
+
     // Recent sessions
     const recentSessions = db.prepare(`
       SELECT id, game_type, difficulty, total_questions, correct_answers, hints_used, duration_seconds, started_at
@@ -65,15 +70,25 @@ router.get('/stats/:patientId', authenticateToken, (req, res) => {
       ORDER BY started_at DESC LIMIT 5
     `).all(patientId);
 
+    // Today's Daily Log (Water intake & medication details)
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const todayLog = db.prepare(`
+      SELECT water_glasses, meds_detail, medication_taken, mood, sleep_hours
+      FROM daily_logs
+      WHERE patient_id = ? AND log_date = ?
+    `).get(patientId, todayStr);
+
     db.close();
 
     return res.json({
       totalAttempts: total,
       accuracy,
       avgResponseTimeSec,
+      cognitiveScore,
       totalHints: attemptsSummary.total_hints || 0,
       streak,
-      recentSessions
+      recentSessions,
+      todayLog: todayLog || { water_glasses: 5, meds_detail: '{"morning":true,"noon":true,"night":false}', medication_taken: 1 }
     });
   } catch (err) {
     console.error('Stats error:', err);

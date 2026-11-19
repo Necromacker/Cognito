@@ -38,6 +38,19 @@
   "admin_panel": "Admin Portal",
   "logout": "Sign Out",
   "stars_earned": "Stars Earned",
-  "streak_days": "Day Streak"
+  "streak_days": "Day Streak",
+  "nav_home": "Home",
+  "nav_play": "Play",
+  "nav_memories": "Memories",
+  "nav_about": "About",
+  "nav_signin": "Sign In",
+  "nav_signout": "Sign Out",
+  "nav_dashboard": "Dashboard",
+  "nav_patients": "Patients",
+  "nav_library": "Library",
+  "nav_dailylog": "Daily Log",
+  "nav_reminders": "Reminders",
+  "nav_settings": "Settings",
+  "nav_admin": "Admin"
 }
 

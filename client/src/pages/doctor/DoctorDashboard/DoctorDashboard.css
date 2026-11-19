@@ -1,50 +1,177 @@
+/* ===== DOCTOR DASHBOARD (CLINICAL LAVENDER THEME) ===== */
+
 .doctor-dashboard-page {
-  min-height: calc(100vh - 120px);
-  padding: var(--space-lg) var(--space-lg);
+  min-height: calc(100vh - 75px);
+  padding: 36px 32px 48px;
+  background-color: var(--color-bg-page);
 }
 
 .doctor-container {
-  max-width: 1000px;
+  max-width: 1140px;
   margin: 0 auto;
 }
 
 .doctor-top-bar {
-  margin-bottom: var(--space-md);
+  margin-bottom: 28px;
 }
 
+.doctor-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--color-primary-bg);
+  color: var(--color-primary);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.doctor-heading {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.doctor-subheading {
+  font-size: 14.5px;
+  color: var(--color-text-secondary);
+  max-width: 650px;
+  line-height: 1.45;
+}
+
+.loading-state-card {
+  padding: 40px;
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+/* Patients Grid */
 .doctor-patients-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: var(--space-md);
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 22px;
 }
 
 .doctor-patient-card {
-  padding: var(--space-lg);
+  background-color: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 4px 18px rgba(37, 32, 68, 0.04);
   cursor: pointer;
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  transition: all 0.15s ease;
+  display: flex;
+  flex-direction: column;
 }
 
 .doctor-patient-card:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: var(--shadow-retro-lg);
+  transform: translateY(-2px);
   border-color: var(--color-primary);
+  box-shadow: 0 10px 28px rgba(99, 53, 181, 0.1);
 }
 
 .doctor-card__header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 6px;
+  align-items: flex-start;
+  margin-bottom: 18px;
+  gap: 12px;
 }
 
 .doctor-patient-name {
-  font-size: var(--font-size-lg);
-  font-weight: 900;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.25;
+  margin-bottom: 4px;
+}
+
+.doctor-card__caretaker {
+  font-size: 12.5px;
+  color: var(--color-text-secondary);
+}
+
+.doctor-stage-pill {
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.doctor-stage-pill--early {
+  background-color: #EDE5FF;
+  color: #6335B5;
+}
+
+.doctor-stage-pill--moderate {
+  background-color: #FFF8E1;
+  color: #B45309;
+}
+
+.doctor-stage-pill--advanced {
+  background-color: #FEE2E2;
+  color: #B91C1C;
+}
+
+.doctor-card__metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  background-color: #FAF9FF;
+  border: 1px solid var(--color-border-light);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 20px;
+}
+
+.doctor-metric-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.doctor-metric-label {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.doctor-metric-value {
+  font-size: 13.5px;
+  font-weight: 700;
   color: var(--color-text-primary);
 }
 
-.doctor-patient-info {
-  font-size: 11px;
-  color: var(--color-text-secondary);
-  margin-bottom: 3px;
+.doctor-metric-value--active {
+  color: #2E7D32;
+}
+
+.btn-doctor-action {
+  margin-top: auto;
+  width: 100%;
+  height: 42px;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 13.5px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-doctor-action:hover {
+  background-color: var(--color-primary-hover);
+  box-shadow: 0 4px 12px rgba(99, 53, 181, 0.2);
 }

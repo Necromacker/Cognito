@@ -1,204 +1,533 @@
+/* ===== CAREGIVER DASHBOARD STYLES (WARM CLINICAL THEME) ===== */
+
 .caretaker-dashboard-page {
-  min-height: calc(100vh - 120px);
-  padding: var(--space-lg) var(--space-lg);
+  min-height: calc(100vh - 75px);
+  padding: 32px 32px 48px;
+  background-color: var(--color-bg-page);
 }
 
 .dashboard-container {
-  max-width: 1100px;
+  max-width: 1240px;
   margin: 0 auto;
 }
 
+/* Top Bar */
 .dashboard-top-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--space-lg);
+  margin-bottom: 24px;
   flex-wrap: wrap;
-  gap: var(--space-sm);
+  gap: 16px;
 }
 
 .dashboard-patient-chips {
   display: flex;
-  gap: var(--space-xs);
+  align-items: center;
+  gap: 8px;
+}
+
+.chips-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .patient-tab-chip {
   background-color: #ffffff;
-  border: 2px solid var(--color-border);
+  border: 1.5px solid var(--color-border);
   color: var(--color-text-primary);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  padding: 6px 14px;
-  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 7px 16px;
+  border-radius: 12px;
   cursor: pointer;
-  box-shadow: 1px 1px 0px var(--color-border);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.patient-tab-chip:hover {
+  border-color: var(--color-primary);
+  background-color: #FAFBF9;
 }
 
 .patient-tab-chip--active {
   background-color: var(--color-primary);
-  color: #ffffff;
-  box-shadow: 2px 2px 0px #000;
+  color: #ffffff !important;
+  border-color: var(--color-primary);
+}
+
+.patient-chip-stage {
+  font-size: 11px;
+  opacity: 0.85;
 }
 
 .dashboard-quick-actions {
   display: flex;
-  gap: var(--space-xs);
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .action-pill-btn {
-  background-color: var(--color-bg-dark);
-  color: #ffffff;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  padding: 6px 12px;
-  border-radius: 2px;
-  border: 1.5px solid #000;
+  background-color: #ffffff;
+  color: var(--color-text-primary);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
   cursor: pointer;
+  transition: all 0.15s ease;
 }
 
 .action-pill-btn:hover {
-  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  background-color: var(--color-secondary-bg);
+  color: var(--color-primary);
 }
 
 /* Alerts Strip */
 .alerts-strip {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
-  background-color: #ffffff;
-  border: 2px solid var(--color-primary);
-  border-radius: var(--radius-sm);
-  padding: 6px 12px;
-  margin-bottom: var(--space-md);
-  box-shadow: var(--shadow-retro-sm);
+  gap: 14px;
+  background-color: #FFF5F5;
+  border: 1px solid rgba(183, 68, 68, 0.25);
+  padding: 12px 18px;
+  border-radius: 14px;
+  margin-bottom: 24px;
 }
 
 .alert-strip-badge {
-  background-color: var(--color-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #B74444;
   color: #ffffff;
-  font-size: 9px;
-  font-weight: 900;
-  letter-spacing: 0.1em;
-  padding: 2px 6px;
-  border-radius: 2px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
 }
 
 .alerts-items {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
+  flex: 1;
 }
 
 .alert-item-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
 }
 
 .alert-item-msg {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--color-text-primary);
+  font-size: 13px;
+  color: #7A2727;
+  font-weight: 500;
 }
 
 .alert-ack-btn {
-  background-color: var(--color-secondary);
-  color: #ffffff;
-  border: 1px solid #000;
-  font-size: 9px;
-  font-weight: 900;
-  padding: 2px 6px;
-  border-radius: 2px;
+  background-color: #ffffff;
+  border: 1px solid rgba(183, 68, 68, 0.3);
+  color: #B74444;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 6px;
   cursor: pointer;
 }
 
-/* Metrics Grid */
-.metrics-pixel-grid {
+/* KPI 4-Grid */
+.metrics-kpi-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-md);
-  margin-bottom: var(--space-lg);
+  gap: 20px;
+  margin-bottom: 28px;
 }
 
-.pixel-stat-card {
-  padding: var(--space-md) var(--space-lg);
+.kpi-card {
+  background-color: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  padding: 22px 20px;
+  box-shadow: 0 4px 16px rgba(32, 44, 42, 0.04);
+  display: flex;
+  flex-direction: column;
 }
 
-.pixel-stat-label {
-  font-size: 10px;
-  font-weight: 900;
-  letter-spacing: 0.14em;
-  color: var(--color-text-muted);
+.kpi-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.kpi-card__label {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--color-text-secondary);
   text-transform: uppercase;
-  display: block;
-  margin-bottom: 2px;
+  letter-spacing: 0.04em;
 }
 
-.pixel-stat-value {
-  font-size: 32px;
-  font-weight: 900;
-  line-height: 1.1;
-  color: var(--color-text-primary);
-  margin-bottom: 2px;
-}
-
-.pixel-stat-value--pink { color: var(--color-primary); }
-.pixel-stat-value--gold { color: #f39c12; }
-.pixel-stat-value--green { color: var(--color-secondary); }
-
-.pixel-stat-sub {
+.kpi-badge {
   font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 8px;
+}
+
+.kpi-badge--green { background-color: #E8F5E9; color: #2E7D32; }
+.kpi-badge--teal  { background-color: #E0F2F1; color: #00695C; }
+.kpi-badge--cyan  { background-color: #E0F7FA; color: #00838F; }
+.kpi-badge--amber { background-color: #FFF8E1; color: #D97706; }
+
+.kpi-card__value-group {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.kpi-card__main-val {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+.kpi-card__scale {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.kpi-card__progress {
+  height: 6px;
+  background-color: #EFF2EE;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.kpi-card__progress-bar {
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+.kpi-card__progress-bar--teal { background-color: #059669; }
+.kpi-card__progress-bar--cyan { background-color: #0284C7; }
+.kpi-card__progress-bar--amber{ background-color: #D97706; }
+
+.kpi-card__sub {
+  font-size: 11.5px;
   color: var(--color-text-secondary);
 }
 
-/* Panels */
-.dashboard-panels-grid {
+/* Trackers 2-Column Row */
+.trackers-two-column-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--space-lg);
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.tracker-card {
+  background-color: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  padding: 26px;
+  box-shadow: 0 4px 18px rgba(32, 44, 42, 0.04);
+  display: flex;
+  flex-direction: column;
+}
+
+.tracker-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.tracker-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tracker-icon-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tracker-icon-badge--water { background-color: #E0F7FA; color: #0284C7; }
+.tracker-icon-badge--meds  { background-color: #EDE5FF; color: #6335B5; }
+
+.tracker-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.25;
+}
+
+.tracker-subtitle {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  line-height: 1.3;
+}
+
+.tracker-saved-pill {
+  font-size: 11px;
+  font-weight: 600;
+  background-color: #E8F5E9;
+  color: #2E7D32;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+/* Water Glasses Meter */
+.water-glasses-meter {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.water-glass-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 4px;
+  border-radius: 12px;
+  background-color: #F4F8FA;
+  border: 1.5px solid #E1EDF2;
+  color: #94A3B8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.water-glass-item:hover {
+  transform: translateY(-2px);
+  border-color: #0284C7;
+}
+
+.water-glass-item--full {
+  background-color: #E0F2FE;
+  border-color: #0284C7;
+  color: #0284C7;
+}
+
+.glass-number {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.water-controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.btn-water-action {
+  background-color: #F1F5F9;
+  color: #334155;
+  border: 1px solid #CBD5E1;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-water-action:hover:not(:disabled) {
+  background-color: #E2E8F0;
+}
+
+.btn-water-action--add {
+  background-color: #0284C7;
+  color: #ffffff;
+  border-color: #0284C7;
+}
+
+.btn-water-action--add:hover {
+  background-color: #0369A1;
+}
+
+.water-total-pill {
+  font-size: 13px;
+  color: #334155;
+}
+
+/* Meds Checklist */
+.meds-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.med-dose-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1.5px solid var(--color-border);
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.med-dose-card:hover {
+  border-color: #6335B5;
+  background-color: #FAF9FF;
+}
+
+.med-dose-card--taken {
+  background-color: #F5F3FF;
+  border-color: #7C3AED;
+}
+
+.med-checkbox {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 2px solid #CBD5E1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  color: #7C3AED;
+  font-size: 14px;
+}
+
+.med-dose-card--taken .med-checkbox {
+  border-color: #7C3AED;
+  background-color: #EDE5FF;
+}
+
+.med-dose-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.med-dose-time {
+  font-size: 11px;
+  font-weight: 700;
+  color: #6B7280;
+  text-transform: uppercase;
+}
+
+.med-dose-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.med-status-tag {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background-color: #F1F5F9;
+  color: #64748B;
+}
+
+.med-status-tag--done {
+  background-color: #E8F5E9;
+  color: #2E7D32;
+}
+
+/* Dashboard Panels (Trend Chart & Recent Sessions) */
+.dashboard-panels-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 24px;
+}
+
+.panel-box {
+  background-color: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  padding: 26px;
+  box-shadow: 0 4px 18px rgba(32, 44, 42, 0.04);
 }
 
 .card-header-bar {
-  border-bottom: 1.5px solid var(--color-border);
-  padding-bottom: 6px;
-  margin-bottom: var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
 }
 
-.card-header-title {
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 0.1em;
+.panel-header-title {
+  font-size: 16px;
+  font-weight: 700;
   color: var(--color-text-primary);
+  display: block;
+}
+
+.panel-header-desc {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  display: block;
+  margin-top: 2px;
+}
+
+.trend-kpi-badge {
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background-color: #E8F5E9;
+  color: #2E7D32;
 }
 
 /* Chart Bars */
 .chart-bars-wrap {
   display: flex;
   align-items: flex-end;
-  justify-content: space-around;
-  height: 140px;
-  padding-top: var(--space-sm);
+  gap: 14px;
+  height: 200px;
+  padding: 10px 0;
+  border-bottom: 1.5px solid var(--color-border);
 }
 
 .chart-bar-col {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   height: 100%;
-  justify-content: flex-end;
-  gap: 3px;
 }
 
 .chart-bar-track {
-  width: 22px;
-  height: 100px;
-  background-color: var(--color-bg-page);
-  border: 1px solid var(--color-border);
-  border-radius: 2px;
+  width: 100%;
+  flex: 1;
+  background-color: #F4F6F4;
+  border-radius: 8px;
   display: flex;
   align-items: flex-end;
   overflow: hidden;
@@ -206,69 +535,85 @@
 
 .chart-bar-fill {
   width: 100%;
-  background: var(--color-primary);
+  background: linear-gradient(180deg, var(--color-primary-light, #2F6759) 0%, var(--color-primary) 100%);
+  border-radius: 8px 8px 0 0;
   transition: height 0.4s ease;
 }
 
 .chart-bar-pct {
-  font-size: 10px;
-  font-weight: 800;
+  font-size: 11.5px;
+  font-weight: 700;
   color: var(--color-text-primary);
+  margin-top: 8px;
 }
 
 .chart-bar-date {
-  font-size: 9px;
+  font-size: 10.5px;
   color: var(--color-text-muted);
+  margin-top: 2px;
 }
 
 /* Recent Sessions */
 .recent-sessions-list {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 12px;
 }
 
 .session-history-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: var(--color-bg-page);
+  padding: 12px 14px;
+  border-radius: 12px;
+  background-color: #FAFBF9;
   border: 1px solid var(--color-border);
-  padding: 6px 10px;
-  border-radius: 2px;
+}
+
+.session-item-left {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
 
 .session-game-badge {
-  font-size: 11px;
-  font-weight: 800;
-  text-transform: uppercase;
+  font-size: 12.5px;
+  font-weight: 700;
   color: var(--color-text-primary);
-  display: block;
 }
 
 .session-time {
-  font-size: 10px;
-  color: var(--color-text-muted);
+  font-size: 11px;
+  color: var(--color-text-secondary);
 }
 
-.session-score {
+.session-score-pill {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
   font-size: 12px;
-  font-weight: 900;
-  color: var(--color-secondary);
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
 }
 
-.no-data-msg {
-  color: var(--color-text-muted);
-  font-size: 12px;
-  text-align: center;
-  padding: var(--space-lg);
-}
-
-@media (max-width: 800px) {
-  .metrics-pixel-grid {
+/* Responsive */
+@media (max-width: 1100px) {
+  .metrics-kpi-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .trackers-two-column-row {
+    grid-template-columns: 1fr;
   }
   .dashboard-panels-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .metrics-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+  .caretaker-dashboard-page {
+    padding: 20px 14px;
   }
 }

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../../api';
-import Button from '../../../components/Button/Button';
 import './PatientDetail.css';
 
 export default function PatientDetail() {
@@ -39,7 +38,7 @@ export default function PatientDetail() {
       await api.post(`/doctor/patient/${patientId}/notes`, { content, recommendations });
       setContent('');
       setRecommendations('');
-      setNoteSaved('Note saved');
+      setNoteSaved('Clinical note recorded successfully.');
       setTimeout(() => setNoteSaved(''), 4000);
       api.get(`/doctor/patient/${patientId}/breakdown`).then(res => setData(res.data));
     } catch (e) { console.error(e); }
@@ -52,42 +51,65 @@ export default function PatientDetail() {
     } catch (e) { console.error(e); }
   };
 
-  if (loading) return <div className="loading-pad">Loading patient file...</div>;
+  if (loading) return <div className="doctor-loading-state">Loading patient clinical file...</div>;
 
   return (
     <div className="patient-detail-page">
       <div className="detail-container">
         
+        {/* Top Header */}
         <div className="detail-header">
-          <div>
-            <button className="back-link" onClick={() => navigate('/doctor')}>
-              BACK TO LIST
+          <div className="detail-header-left">
+            <button className="doctor-back-btn" onClick={() => navigate('/doctor')}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"/>
+                <polyline points="12 19 5 12 12 5"/>
+              </svg>
+              <span>Back to Registry</span>
             </button>
-            <h1 className="detail-title">{data?.patient?.name}</h1>
+            <div className="detail-patient-title-group">
+              <h1 className="detail-title">{data?.patient?.name}</h1>
+              <span className="doctor-stage-pill doctor-stage-pill--early">
+                {data?.patient?.stage?.toUpperCase() || 'EARLY'} STAGE
+              </span>
+            </div>
+            <p className="detail-patient-meta">
+              Age: {data?.patient?.age || 74} | Language: {data?.patient?.language?.toUpperCase() || 'EN'} | Caretaker: {data?.patient?.caretaker_name || 'Family'}
+            </p>
           </div>
-          <Button variant="secondary" onClick={handleExportPDF}>
-            EXPORT PDF REPORT
-          </Button>
+
+          <button type="button" className="btn-export-pdf" onClick={handleExportPDF}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <span>Export Clinical PDF Report</span>
+          </button>
         </div>
 
-        {/* Game Breakdown Table */}
+        {/* Diagnostic Engagement Table */}
         <div className="detail-card card">
-          <div className="card-top-tag">DIAGNOSTIC ENGAGEMENT</div>
+          <div className="doctor-card-tag">Diagnostic Module Engagement</div>
           <table className="breakdown-table">
             <thead>
               <tr>
-                <th>MODULE</th>
-                <th>SESSIONS</th>
-                <th>ACCURACY</th>
-                <th>AVG RESPONSE</th>
+                <th>Module</th>
+                <th>Sessions Played</th>
+                <th>Accuracy</th>
+                <th>Avg Reaction Time</th>
               </tr>
             </thead>
             <tbody>
               {data?.gameBreakdown?.map((g, i) => (
                 <tr key={i}>
-                  <td><strong>{g.gameType.toUpperCase()}</strong></td>
-                  <td>{g.sessionCount}</td>
-                  <td><span className="table-acc">{g.accuracy}%</span></td>
+                  <td><strong>{g.gameType.replace(/-/g, ' ').toUpperCase()}</strong></td>
+                  <td>{g.sessionCount} sessions</td>
+                  <td>
+                    <span className="table-acc-pill">
+                      {g.accuracy}%
+                    </span>
+                  </td>
                   <td>{g.avgResponseTimeSec}s</td>
                 </tr>
               ))}
@@ -97,62 +119,105 @@ export default function PatientDetail() {
 
         {/* Date Range Comparison */}
         <div className="detail-card card">
-          <div className="card-top-tag">LONGITUDINAL COMPARISON</div>
+          <div className="doctor-card-tag">Longitudinal Cognitive Trend Comparison</div>
           <div className="compare-inputs-grid">
             <div className="compare-col">
-              <label className="form-label">Period 1 (Baseline)</label>
-              <input type="date" className="form-input" value={start1} onChange={e => setStart1(e.target.value)} />
-              <input type="date" className="form-input" value={end1} onChange={e => setEnd1(e.target.value)} />
+              <label className="doctor-input-label">Period 1 (Baseline)</label>
+              <div className="date-inputs-row">
+                <input type="date" className="doctor-date-input" value={start1} onChange={e => setStart1(e.target.value)} />
+                <span className="date-sep">to</span>
+                <input type="date" className="doctor-date-input" value={end1} onChange={e => setEnd1(e.target.value)} />
+              </div>
             </div>
             <div className="compare-col">
-              <label className="form-label">Period 2 (Evaluation)</label>
-              <input type="date" className="form-input" value={start2} onChange={e => setStart2(e.target.value)} />
-              <input type="date" className="form-input" value={end2} onChange={e => setEnd2(e.target.value)} />
+              <label className="doctor-input-label">Period 2 (Evaluation)</label>
+              <div className="date-inputs-row">
+                <input type="date" className="doctor-date-input" value={start2} onChange={e => setStart2(e.target.value)} />
+                <span className="date-sep">to</span>
+                <input type="date" className="doctor-date-input" value={end2} onChange={e => setEnd2(e.target.value)} />
+              </div>
             </div>
           </div>
-          <Button variant="primary" onClick={handleCompare} style={{ marginTop: '10px' }}>
-            RUN COMPARISON
-          </Button>
+
+          <button type="button" className="btn-doctor-compare" onClick={handleCompare}>
+            Run Longitudinal Analysis
+          </button>
 
           {comparison && (
             <div className="compare-results-box">
               <div className="compare-stat">
-                <h3>{comparison.range1.dates}</h3>
-                <p>Accuracy: <strong>{comparison.range1.accuracy}%</strong></p>
-                <p>Sessions: {comparison.range1.sessions}</p>
-                <p>Response: {comparison.range1.avgResponseTimeSec}s</p>
+                <span className="compare-period-tag">Baseline Period</span>
+                <h4 className="compare-dates-title">{comparison.range1.dates}</h4>
+                <div className="compare-data-row">
+                  <span>Accuracy:</span>
+                  <strong className="compare-stat-acc">{comparison.range1.accuracy}%</strong>
+                </div>
+                <div className="compare-data-row">
+                  <span>Total Sessions:</span>
+                  <strong>{comparison.range1.sessions}</strong>
+                </div>
+                <div className="compare-data-row">
+                  <span>Avg Response:</span>
+                  <strong>{comparison.range1.avgResponseTimeSec}s</strong>
+                </div>
               </div>
+
               <div className="compare-stat compare-stat--current">
-                <h3>{comparison.range2.dates}</h3>
-                <p>Accuracy: <strong>{comparison.range2.accuracy}%</strong></p>
-                <p>Sessions: {comparison.range2.sessions}</p>
-                <p>Response: {comparison.range2.avgResponseTimeSec}s</p>
+                <span className="compare-period-tag compare-period-tag--eval">Evaluation Period</span>
+                <h4 className="compare-dates-title">{comparison.range2.dates}</h4>
+                <div className="compare-data-row">
+                  <span>Accuracy:</span>
+                  <strong className="compare-stat-acc compare-stat-acc--highlight">{comparison.range2.accuracy}%</strong>
+                </div>
+                <div className="compare-data-row">
+                  <span>Total Sessions:</span>
+                  <strong>{comparison.range2.sessions}</strong>
+                </div>
+                <div className="compare-data-row">
+                  <span>Avg Response:</span>
+                  <strong>{comparison.range2.avgResponseTimeSec}s</strong>
+                </div>
               </div>
             </div>
           )}
         </div>
 
-        {/* Clinical Note Form */}
+        {/* Clinical Notes Form */}
         <div className="detail-card card">
-          <div className="card-top-tag">CLINICAL OBSERVATION</div>
+          <div className="doctor-card-tag">Add Clinical Assessment & Recommendations</div>
           <form onSubmit={handleAddNote} className="doctor-note-form">
-            <textarea
-              required
-              className="form-textarea"
-              placeholder="Clinical observation..."
-              value={content}
-              onChange={e => setContent(e.target.value)}
-            ></textarea>
-            <textarea
-              className="form-textarea"
-              placeholder="Recommended adjustments..."
-              value={recommendations}
-              onChange={e => setRecommendations(e.target.value)}
-            ></textarea>
-            <Button type="submit" variant="primary">RECORD NOTE</Button>
-            {noteSaved && <span className="note-saved-text">✓ {noteSaved}</span>}
+            <div className="doctor-form-field">
+              <label className="doctor-input-label">Clinical Observations</label>
+              <textarea
+                required
+                className="doctor-textarea"
+                placeholder="Document observed cognitive recall, verbal engagement, mood and responses..."
+                value={content}
+                onChange={e => setContent(e.target.value)}
+                rows={3}
+              ></textarea>
+            </div>
+            
+            <div className="doctor-form-field">
+              <label className="doctor-input-label">Caregiver Recommendations</label>
+              <textarea
+                className="doctor-textarea"
+                placeholder="Recommended session length, preferred game categories, or adjustments for caregivers..."
+                value={recommendations}
+                onChange={e => setRecommendations(e.target.value)}
+                rows={2}
+              ></textarea>
+            </div>
+
+            <div className="note-submit-row">
+              <button type="submit" className="btn-doctor-record">
+                Record Clinical Note
+              </button>
+              {noteSaved && <span className="note-saved-text">✓ {noteSaved}</span>}
+            </div>
           </form>
         </div>
+
       </div>
     </div>
   );

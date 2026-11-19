@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { useTextToSpeech } from '../../../hooks/useTextToSpeech';
@@ -40,6 +40,7 @@ export default function GameSession() {
   const [isCompleted, setIsCompleted] = useState(false);
   const [feedback, setFeedback] = useState(null);
   const [showHint, setShowHint] = useState(false);
+  const [difficulty, setDifficulty] = useState('easy'); // 'easy', 'medium', 'hard'
 
   const startTimeRef = useRef(Date.now());
   const questionStartTimeRef = useRef(Date.now());
@@ -53,7 +54,7 @@ export default function GameSession() {
       api.post('/games/session', {
         patientId,
         gameType,
-        difficulty: 1
+        difficulty: difficulty === 'easy' ? 1 : (difficulty === 'medium' ? 2 : 3)
       }).then(res => setSessionId(res.data.sessionId)).catch(() => {});
 
       api.get(`/games/questions/${gameType}/${patientId}`)
@@ -73,7 +74,22 @@ export default function GameSession() {
     }
   }, [patientId, gameType]);
 
-  const currentQuestion = questions[currentIndex];
+  // Adapt options based on chosen difficulty (Easy = 2 options, Medium = 3 options, Hard = 4 options)
+  const adaptedQuestion = useMemo(() => {
+    if (!questions[currentIndex]) return null;
+    const base = questions[currentIndex];
+    if (!base.options || base.options.length <= 2) return base;
+
+    let opts = [...base.options];
+    if (difficulty === 'easy') {
+      const wrong = opts.filter(o => o !== base.correctAnswer);
+      opts = [base.correctAnswer, wrong[0]].sort(() => 0.5 - Math.random());
+    } else if (difficulty === 'medium' && opts.length > 3) {
+      const wrong = opts.filter(o => o !== base.correctAnswer);
+      opts = [base.correctAnswer, wrong[0], wrong[1]].sort(() => 0.5 - Math.random());
+    }
+    return { ...base, options: opts };
+  }, [questions, currentIndex, difficulty]);
 
   const handleAnswer = async (isCorrect, answerGiven) => {
     const responseTimeMs = Date.now() - questionStartTimeRef.current;
@@ -81,9 +97,9 @@ export default function GameSession() {
     if (sessionId) {
       api.post('/games/attempt', {
         sessionId,
-        questionData: currentQuestion,
+        questionData: adaptedQuestion,
         answerGiven: String(answerGiven),
-        correctAnswer: String(currentQuestion.correctAnswer || ''),
+        correctAnswer: String(adaptedQuestion?.correctAnswer || ''),
         isCorrect,
         responseTimeMs,
         hintsUsed
@@ -96,7 +112,7 @@ export default function GameSession() {
       setFeedback({ isCorrect: true, message: msg });
       speak(msg);
     } else {
-      const msg = `Nice try! The answer is: ${currentQuestion.correctAnswer || ''}`;
+      const msg = `Nice try! The answer is: ${adaptedQuestion?.correctAnswer || ''}`;
       setFeedback({ isCorrect: false, message: msg });
       speak(msg);
     }
@@ -136,10 +152,12 @@ export default function GameSession() {
   const handleRequestHint = () => {
     setHintsUsed(prev => prev + 1);
     setShowHint(true);
-    if (currentQuestion?.hint) speak(currentQuestion.hint);
+    if (adaptedQuestion?.hint) {
+      speak(`Here is a gentle hint: ${adaptedQuestion.hint}`);
+    }
   };
 
-  if (loading) return <div className="game-loading-strip">Preparing module...</div>;
+  if (loading) return <div className="game-loading-strip">Preparing calming session...</div>;
 
   if (isCompleted) {
     const finalStars = Math.max(3, Math.min(5, correctCount + 1));
@@ -147,8 +165,8 @@ export default function GameSession() {
       <div className="game-complete-screen">
         <div className="game-complete-card card">
           <div className="badge badge--green" style={{ marginBottom: '8px' }}>SESSION COMPLETE</div>
-          <h1 className="game-complete__title">WONDERFUL PLAY</h1>
-          <p className="game-complete__message">Your mind is sharp and calm.</p>
+          <h1 className="game-complete__title">WONDERFUL WORK</h1>
+          <p className="game-complete__message">You completed all activities gently and calmly.</p>
 
           <div className="game-complete__stars">
             <StarRating stars={finalStars} maxStars={5} showStreak={true} streak={2} />
@@ -160,14 +178,14 @@ export default function GameSession() {
               className="btn btn--primary"
               onClick={() => navigate('/patient/games')}
             >
-              PLAY ANOTHER ▶
+              Play Another Game ▶
             </button>
             <button
               type="button"
               className="btn btn--outline"
               onClick={() => navigate('/patient')}
             >
-              RETURN HOME
+              Return Home
             </button>
           </div>
         </div>
@@ -177,8 +195,8 @@ export default function GameSession() {
   }
 
   const renderGameComponent = () => {
-    if (!currentQuestion) return <div>No items in this module yet.</div>;
-    const gameProps = { question: currentQuestion, onAnswer: handleAnswer, showHint, speak };
+    if (!adaptedQuestion) return <div>No items in this module yet.</div>;
+    const gameProps = { question: adaptedQuestion, onAnswer: handleAnswer, showHint, speak };
 
     switch (gameType) {
       case 'who-is-this': return <WhoIsThis {...gameProps} />;
@@ -203,31 +221,76 @@ export default function GameSession() {
     <div className="game-session-page">
       <div className="game-session-container">
         
-        {/* Top Control Bar */}
+        {/* Top Control Bar with Difficulty & Hint */}
         <div className="session-top-controls">
           <button
             type="button"
             className="session-ctrl-btn"
             onClick={() => navigate('/patient/games')}
           >
-            EXIT
+            ← Exit
           </button>
+
+          {/* Difficulty Selector */}
+          <div className="difficulty-pill-group">
+            <button
+              type="button"
+              className={`diff-btn ${difficulty === 'easy' ? 'diff-btn--active' : ''}`}
+              onClick={() => setDifficulty('easy')}
+              title="Easy: 2 choices, gentle hints"
+            >
+              Easy
+            </button>
+            <button
+              type="button"
+              className={`diff-btn ${difficulty === 'medium' ? 'diff-btn--active' : ''}`}
+              onClick={() => setDifficulty('medium')}
+              title="Medium: 3 choices"
+            >
+              Medium
+            </button>
+            <button
+              type="button"
+              className={`diff-btn ${difficulty === 'hard' ? 'diff-btn--active' : ''}`}
+              onClick={() => setDifficulty('hard')}
+              title="Hard: 4 choices"
+            >
+              Hard
+            </button>
+          </div>
 
           <div className="session-progress-strip">
             <span className="session-step-label">
-              QUESTION {currentIndex + 1} OF {Math.max(1, questions.length)}
+              Activity {currentIndex + 1} of {Math.max(1, questions.length)}
             </span>
             <ProgressBar current={currentIndex + 1} total={Math.max(1, questions.length)} />
           </div>
 
+          {/* Prominent Hint Button */}
           <button
             type="button"
-            className="session-ctrl-btn session-ctrl-btn--hint"
+            className={`session-ctrl-btn session-ctrl-btn--hint ${showHint ? 'session-ctrl-btn--hint-active' : ''}`}
             onClick={handleRequestHint}
           >
-            HINT
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2a6 6 0 0 0-6 6c0 2.8 2 4.5 3 6v2h6v-2c1-1.5 3-3.2 3-6a6 6 0 0 0-6-6z"/>
+              <line x1="9" y1="18" x2="15" y2="18"/>
+              <line x1="10" y1="21" x2="14" y2="21"/>
+            </svg>
+            <span>{showHint ? 'Hint Active' : 'Need a Hint?'}</span>
           </button>
         </div>
+
+        {/* Floating Hint Callout Card */}
+        {showHint && adaptedQuestion?.hint && (
+          <div className="active-hint-callout">
+            <div className="hint-icon">💡</div>
+            <div className="hint-content">
+              <span className="hint-label">Gentle Clue:</span>
+              <p className="hint-text">{adaptedQuestion.hint}</p>
+            </div>
+          </div>
+        )}
 
         {/* Active Game */}
         <div className="session-active-card card">

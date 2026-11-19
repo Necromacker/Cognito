@@ -45,7 +45,7 @@ export default function Navbar() {
                     <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
                     <polyline points="9 22 9 12 15 12 15 22"/>
                   </svg>
-                  <span>Home</span>
+                  <span>{t('nav_home')}</span>
                 </Link>
                 <Link to="/patient/games" className={`nav-item ${location.pathname.startsWith('/patient/games') ? 'nav-item--active' : ''}`}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -53,7 +53,7 @@ export default function Navbar() {
                     <path d="M6 12h4m-2-2v4"/>
                     <circle cx="16" cy="12" r="1.5"/>
                   </svg>
-                  <span>Play</span>
+                  <span>{t('nav_play')}</span>
                 </Link>
                 <Link to="/patient/memories" className={`nav-item ${location.pathname === '/patient/memories' ? 'nav-item--active' : ''}`}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -61,7 +61,7 @@ export default function Navbar() {
                     <circle cx="9" cy="9" r="2"/>
                     <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
                   </svg>
-                  <span>Memories</span>
+                  <span>{t('nav_memories')}</span>
                 </Link>
               </>
             ) : (
@@ -69,33 +69,33 @@ export default function Navbar() {
                 {user.role === 'caretaker' && (
                   <>
                     <Link to="/caretaker" className={`nav-item ${location.pathname === '/caretaker' ? 'nav-item--active' : ''}`}>
-                      <span>Dashboard</span>
+                      <span>{t('nav_dashboard')}</span>
                     </Link>
                     <Link to="/caretaker/patients" className={`nav-item ${location.pathname.startsWith('/caretaker/patients') ? 'nav-item--active' : ''}`}>
-                      <span>Patients</span>
+                      <span>{t('nav_patients')}</span>
                     </Link>
                     <Link to="/caretaker/content" className={`nav-item ${location.pathname.startsWith('/caretaker/content') ? 'nav-item--active' : ''}`}>
-                      <span>Library</span>
+                      <span>{t('nav_library')}</span>
                     </Link>
                     <Link to="/caretaker/dailylog" className={`nav-item ${location.pathname.startsWith('/caretaker/dailylog') ? 'nav-item--active' : ''}`}>
-                      <span>Daily Log</span>
+                      <span>{t('nav_dailylog')}</span>
                     </Link>
                     <Link to="/caretaker/reminders" className={`nav-item ${location.pathname.startsWith('/caretaker/reminders') ? 'nav-item--active' : ''}`}>
-                      <span>Reminders</span>
+                      <span>{t('nav_reminders')}</span>
                     </Link>
                     <Link to="/caretaker/settings" className={`nav-item ${location.pathname.startsWith('/caretaker/settings') ? 'nav-item--active' : ''}`}>
-                      <span>Settings</span>
+                      <span>{t('nav_settings')}</span>
                     </Link>
                   </>
                 )}
                 {user.role === 'doctor' && (
                   <Link to="/doctor" className={`nav-item ${location.pathname === '/doctor' ? 'nav-item--active' : ''}`}>
-                    <span>Patients</span>
+                    <span>{t('nav_patients')}</span>
                   </Link>
                 )}
                 {user.role === 'admin' && (
                   <Link to="/admin" className={`nav-item ${location.pathname === '/admin' ? 'nav-item--active' : ''}`}>
-                    <span>Admin</span>
+                    <span>{t('nav_admin')}</span>
                   </Link>
                 )}
               </>
@@ -107,7 +107,7 @@ export default function Navbar() {
                   <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
                   <polyline points="9 22 9 12 15 12 15 22"/>
                 </svg>
-                <span>Home</span>
+                <span>{t('nav_home')}</span>
               </Link>
               <a href="#features" className="nav-item">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -115,7 +115,7 @@ export default function Navbar() {
                   <path d="M6 12h4m-2-2v4"/>
                   <circle cx="16" cy="12" r="1.5"/>
                 </svg>
-                <span>Play</span>
+                <span>{t('nav_play')}</span>
               </a>
               <a href="#memories" className="nav-item">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -123,14 +123,14 @@ export default function Navbar() {
                   <circle cx="9" cy="9" r="2"/>
                   <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
                 </svg>
-                <span>Memories</span>
+                <span>{t('nav_memories')}</span>
               </a>
               <a href="#about" className="nav-item">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10"/>
                   <path d="M12 16v-4m0-4h.01"/>
                 </svg>
-                <span>About</span>
+                <span>{t('nav_about')}</span>
               </a>
             </>
           )}
@@ -146,7 +146,7 @@ export default function Navbar() {
                 <polyline points="16 17 21 12 16 7"/>
                 <line x1="21" x2="9" y1="12" y2="12"/>
               </svg>
-              <span>Sign Out</span>
+              <span>{t('nav_signout')}</span>
             </button>
           ) : (
             <Link to="/" className="btn-signout">
@@ -155,7 +155,7 @@ export default function Navbar() {
                 <polyline points="10 17 15 12 10 7"/>
                 <line x1="15" x2="3" y1="12" y2="12"/>
               </svg>
-              <span>Sign In</span>
+              <span>{t('nav_signin')}</span>
             </Link>
           )}
         </div>

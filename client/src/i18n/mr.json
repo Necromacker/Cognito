@@ -38,6 +38,19 @@
   "admin_panel": "प्रशासक",
   "logout": "बाहेर पडा",
   "stars_earned": "मिळालेले तारे",
-  "streak_days": "सलग दिवस"
+  "streak_days": "सलग दिवस",
+  "nav_home": "होम",
+  "nav_play": "खेळ",
+  "nav_memories": "आठवणी",
+  "nav_about": "माहिती",
+  "nav_signin": "लॉगिन",
+  "nav_signout": "बाहेर पडा",
+  "nav_dashboard": "डॅशबोर्ड",
+  "nav_patients": "रुग्ण",
+  "nav_library": "लायब्ररी",
+  "nav_dailylog": "दैनंदिन नोंद",
+  "nav_reminders": "आठवण",
+  "nav_settings": "सेटिंग्ज",
+  "nav_admin": "प्रशासक"
 }
 

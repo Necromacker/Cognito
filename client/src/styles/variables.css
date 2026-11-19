@@ -102,3 +102,52 @@
   --z-modal:     300;
   --z-toast:     400;
 }
+
+/* ===== 2. DOCTOR – CLINICAL LAVENDER THEME ===== */
+[data-theme="doctor"],
+.theme-doctor {
+  --color-bg-page:        #F7F5FF;   /* Lavender white */
+  --color-bg-grid:        #E8E3F5;
+  --color-bg-card:        #FFFFFF;   /* White */
+  --color-bg-dark:        #252044;   /* Deep indigo */
+  --color-bg-dark-card:   #322A59;
+  --color-bg-medium:      #EFEBF9;
+
+  /* Primary & Accent (Medical Purple & Soft Lavender) */
+  --color-primary:        #6335B5;   /* Medical purple */
+  --color-primary-hover:  #502996;
+  --color-primary-light:  #7545D5;   /* Violet */
+  --color-primary-bg:     #EDE5FF;   /* Soft lavender */
+
+  --color-secondary:      #EDE5FF;   /* Soft lavender */
+  --color-secondary-hover:#DFD3FA;
+  --color-secondary-bg:   #F3EEFF;
+
+  --color-accent:         #7545D5;   /* Chart Violet */
+  --color-accent-hover:   #6335B5;
+  --color-accent-bg:      #F5F0FF;
+
+  --color-chart-primary:  #7545D5;   /* Violet */
+  --color-chart-secondary:#B49AEF;   /* Soft purple */
+
+  --color-alert:          #B74444;   /* Dark red (Critical alerts) */
+  --color-alert-hover:    #9F3838;
+  --color-alert-bg:       #FBF0F0;
+
+  /* Typography */
+  --color-text-primary:   #252044;   /* Deep indigo */
+  --color-text-secondary: #625B78;   /* Muted purple-grey */
+  --color-text-muted:     #8C84A3;
+  --color-text-white:     #FFFFFF;
+  --color-text-on-dark:   #F7F5FF;
+
+  /* Borders & Shadows */
+  --color-border:         #D9D0EC;   /* Lavender grey */
+  --color-border-light:   #EBE5F7;
+  --color-border-dark:    #252044;
+
+  --shadow-retro:         0 8px 24px rgba(37, 32, 68, 0.08);
+  --shadow-retro-sm:      0 2px 8px rgba(37, 32, 68, 0.05);
+  --shadow-retro-lg:      0 16px 36px rgba(37, 32, 68, 0.12);
+  --shadow-retro-pink:    0 8px 24px rgba(99, 53, 181, 0.18);
+}

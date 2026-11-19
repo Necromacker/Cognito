@@ -1,10 +1,66 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcryptjs');
 const { getDb } = require('../db/database');
 const { authenticateToken, authorizeRoles } = require('../middleware/auth');
 
 // Require admin for all routes here
 router.use(authenticateToken, authorizeRoles('admin'));
+
+// Create new Doctor or Caregiver
+router.post('/users/create', async (req, res) => {
+  try {
+    const { name, email, password, role } = req.body;
+    if (!name || !email || !password || !role) {
+      return res.status(400).json({ error: 'Name, email, password and role are required' });
+    }
+    if (!['doctor', 'caretaker', 'admin'].includes(role)) {
+      return res.status(400).json({ error: 'Role must be doctor, caretaker or admin' });
+    }
+
+    const db = getDb();
+    const existing = db.prepare('SELECT id FROM users WHERE email = ?').get(email);
+    if (existing) {
+      db.close();
+      return res.status(400).json({ error: 'User with this email already exists' });
+    }
+
+    const password_hash = await bcrypt.hash(password, 10);
+    const is_verified = role === 'doctor' ? 1 : 1; // Created by admin = verified by default
+
+    const result = db.prepare(`
+      INSERT INTO users (email, password_hash, role, name, is_verified, is_active)
+      VALUES (?, ?, ?, ?, ?, 1)
+    `).run(email, password_hash, role, name, is_verified);
+
+    db.close();
+    return res.status(201).json({ id: result.lastInsertRowid, message: `${role.toUpperCase()} created successfully` });
+  } catch (err) {
+    console.error('Admin create user error:', err);
+    return res.status(500).json({ error: 'Failed to create user' });
+  }
+});
+
+// Remove / delete user
+router.delete('/users/:id', (req, res) => {
+  try {
+    const userId = req.params.id;
+    const db = getDb();
+    
+    // Prevent admin from deleting themselves
+    if (parseInt(userId) === req.user.id) {
+      db.close();
+      return res.status(400).json({ error: 'You cannot delete your own admin account' });
+    }
+
+    db.prepare('DELETE FROM users WHERE id = ?').run(userId);
+    db.close();
+    return res.json({ message: 'User deleted successfully' });
+  } catch (err) {
+    console.error('Admin delete user error:', err);
+    return res.status(500).json({ error: 'Failed to delete user' });
+  }
+});
 
 // Get all users
 router.get('/users', (req, res) => {

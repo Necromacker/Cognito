@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { LanguageProvider } from './context/LanguageContext';
 import Navbar from './components/Navbar/Navbar';
@@ -24,10 +24,13 @@ import PatientDetail from './pages/doctor/PatientDetail/PatientDetail';
 import AdminDashboard from './pages/admin/AdminDashboard/AdminDashboard';
 
 export default function App() {
+  const location = useLocation();
+  const isDoctorTheme = location.pathname.startsWith('/doctor');
+
   return (
     <AuthProvider>
       <LanguageProvider>
-        <div className="app-layout">
+        <div className={`app-layout ${isDoctorTheme ? 'theme-doctor' : ''}`} data-theme={isDoctorTheme ? 'doctor' : 'clinical'}>
           <Navbar />
           <Routes>
             {/* Public Entry / Login */}

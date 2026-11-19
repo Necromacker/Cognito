@@ -6,7 +6,19 @@ export default function WhoseVoice({ question, onAnswer, showHint }) {
   const audioRef = useRef(null);
 
   const playVoice = () => {
-    if (audioRef.current) audioRef.current.play();
+    if (audioRef.current && voiceUrl) {
+      audioRef.current.play().catch(() => {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const utter = new SpeechSynthesisUtterance(`Hello Dad, it's me! Can you remember my voice?`);
+          window.speechSynthesis.speak(utter);
+        }
+      });
+    } else if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(`Hello! It's lovely to hear from you. Can you guess whose voice this is?`);
+      window.speechSynthesis.speak(utter);
+    }
   };
 
   return (
