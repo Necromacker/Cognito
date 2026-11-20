@@ -148,8 +148,8 @@ export default function Login() {
 
   const curr = portals.find(p => p.id === activePortal) || portals[0];
 
-  // Other access items for the right card: ONLY the other 3 portals across ALL login pages!
-  const otherAccessItems = portals.filter(p => p.id !== activePortal);
+  // Keep all 4 access options consistent across ALL login pages
+  const otherAccessItems = portals;
 
   // PIN Keypad Handlers
   const handlePinDigit = (digit) => {
@@ -494,29 +494,41 @@ export default function Login() {
                 <h3 className="other-access-title">{t('other_access_title')}</h3>
               </div>
 
-              {/* Show the remaining 3 portals cleanly and interactively */}
+              {/* Always display all 4 access options across all pages */}
               <div className="access-options-list">
-                {otherAccessItems.map(item => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    className="access-item-card"
-                    onClick={() => switchPortal(item.id)}
-                  >
-                    <div className={`access-badge ${item.badgeClass}`}>
-                      {renderIcon(item.icon)}
-                    </div>
-                    <div className="access-text-group">
-                      <span className="access-name">{t(item.accessTitleKey)}</span>
-                      <span className="access-desc">{t(item.accessDescKey)}</span>
-                    </div>
-                    <div className="access-chevron">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="9 18 15 12 9 6"/>
-                      </svg>
-                    </div>
-                  </button>
-                ))}
+                {otherAccessItems.map(item => {
+                  const isActive = item.id === activePortal;
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      className={`access-item-card ${isActive ? 'access-item-card--active' : ''}`}
+                      onClick={() => switchPortal(item.id)}
+                    >
+                      <div className={`access-badge ${item.badgeClass}`}>
+                        {renderIcon(item.icon)}
+                      </div>
+                      <div className="access-text-group">
+                        <div className="access-title-row">
+                          <span className="access-name">{t(item.accessTitleKey)}</span>
+                          {isActive && <span className="access-current-pill">Current</span>}
+                        </div>
+                        <span className="access-desc">{t(item.accessDescKey)}</span>
+                      </div>
+                      <div className="access-chevron">
+                        {isActive ? (
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="20 6 9 17 4 12"/>
+                          </svg>
+                        ) : (
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="9 18 15 12 9 6"/>
+                          </svg>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>

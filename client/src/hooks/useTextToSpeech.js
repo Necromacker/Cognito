@@ -1,47 +1,143 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+
+/* Preferred natural, human, warm voices (avoiding robotic/metallic defaults) */
+const PREFERRED_VOICES = {
+  en: [
+    // Top-tier natural voices across Chrome/Edge/Safari/macOS
+    'Natural',
+    'Online (Natural)',
+    'Samantha',
+    'Karen',
+    'Serena',
+    'Daniel',
+    'Moira',
+    'Google US English',
+    'Google UK English Female',
+    'Tessa',
+    'Aman',
+    'Rishi',
+    'Microsoft Jenny Online (Natural)',
+    'Microsoft Aria Online (Natural)',
+    'Microsoft Zira',
+  ],
+  hi: [
+    'Google हिन्दी',
+    'Lekha',
+    'Swara',
+    'Madhur',
+    'Rishi',
+    'Aman',
+  ],
+  mr: [
+    'Google मराठी',
+    'Aarohi',
+    'Lekha',
+  ],
+};
+
+function pickBestVoice(voices, langCode) {
+  if (!voices || voices.length === 0) return null;
+
+  const preferred = PREFERRED_VOICES[langCode] || PREFERRED_VOICES.en;
+  const langPrefix = langCode === 'hi' ? 'hi' : langCode === 'mr' ? 'mr' : 'en';
+
+  // 1. First prioritize any voice explicitly tagged as "Natural" or "Neural"
+  const neuralMatch = voices.find(v => 
+    v.lang.startsWith(langPrefix) && 
+    (v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('neural') || v.name.toLowerCase().includes('online'))
+  );
+  if (neuralMatch) return neuralMatch;
+
+  // 2. Try preferred friendly list in order
+  for (const name of preferred) {
+    const v = voices.find(v => 
+      v.name.toLowerCase().includes(name.toLowerCase()) && 
+      (v.lang.startsWith(langPrefix) || langPrefix === 'en')
+    );
+    if (v) return v;
+  }
+
+  // 3. Fallback: non-compact, remote voice with correct language
+  const nonCompact = voices.find(v => 
+    v.lang.startsWith(langPrefix) && 
+    !v.name.toLowerCase().includes('compact') && 
+    !v.name.toLowerCase().includes('bad news') && 
+    !v.name.toLowerCase().includes('jester') && 
+    !v.name.toLowerCase().includes('organ') && 
+    !v.name.toLowerCase().includes('zarvox')
+  );
+  if (nonCompact) return nonCompact;
+
+  // 4. Any voice matching language
+  return voices.find(v => v.lang.startsWith(langPrefix)) || voices[0] || null;
+}
 
 export function useTextToSpeech() {
   const { language } = useLanguage();
   const [isSupported, setIsSupported] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const voicesRef = useRef([]);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       setIsSupported(true);
+
+      const loadVoices = () => {
+        const list = window.speechSynthesis.getVoices();
+        if (list && list.length > 0) {
+          voicesRef.current = list;
+        }
+      };
+
+      loadVoices();
+
+      // Some browsers (Chrome) populate voices asynchronously
+      if (window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+      }
+      window.speechSynthesis.addEventListener('voiceschanged', loadVoices);
+
+      return () => {
+        window.speechSynthesis.removeEventListener('voiceschanged', loadVoices);
+      };
     }
   }, []);
 
   const speak = useCallback((text) => {
     if (!isSupported || !text) return;
 
-    window.speechSynthesis.cancel(); // Stop any previous speech
+    try {
+      window.speechSynthesis.cancel(); // Stop any pending speech
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.85; // Slower, calmer pace for dementia care
-    utterance.pitch = 1.0;
+      const utterance = new SpeechSynthesisUtterance(text);
+      
+      // More human pacing: 0.90x speed, gentle pitch for warm conversational tone
+      utterance.rate = 0.92;
+      utterance.pitch = 1.0;
 
-    // Set language code
-    if (language === 'hi') {
-      utterance.lang = 'hi-IN';
-    } else if (language === 'mr') {
-      utterance.lang = 'mr-IN';
-    } else {
-      utterance.lang = 'en-US';
+      const langCode = language === 'hi' ? 'hi-IN' : language === 'mr' ? 'mr-IN' : 'en-US';
+      utterance.lang = langCode;
+
+      // Re-fetch if ref is empty
+      if (!voicesRef.current || voicesRef.current.length === 0) {
+        voicesRef.current = window.speechSynthesis.getVoices();
+      }
+
+      const bestVoice = pickBestVoice(voicesRef.current, language || 'en');
+      if (bestVoice) {
+        utterance.voice = bestVoice;
+      }
+
+      utterance.onstart = () => setIsSpeaking(true);
+      utterance.onend = () => setIsSpeaking(false);
+      utterance.onerror = () => setIsSpeaking(false);
+
+      window.speechSynthesis.speak(utterance);
+    } catch (err) {
+      console.warn('Speech synthesis error:', err);
+      setIsSpeaking(false);
     }
-
-    // Attempt to pick a gentle natural voice
-    const voices = window.speechSynthesis.getVoices();
-    const matchingVoice = voices.find(v => v.lang.startsWith(utterance.lang));
-    if (matchingVoice) {
-      utterance.voice = matchingVoice;
-    }
-
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
-
-    window.speechSynthesis.speak(utterance);
   }, [isSupported, language]);
 
   const stop = useCallback(() => {
@@ -53,4 +149,3 @@ export function useTextToSpeech() {
 
   return { speak, stop, isSpeaking, isSupported };
 }
-

@@ -507,6 +507,29 @@
   box-shadow: 0 4px 14px rgba(32, 44, 42, 0.05);
 }
 
+.access-item-card--active {
+  border-color: var(--portal-primary, #234E43);
+  background-color: var(--portal-badge-bg, #EDF5F1);
+  box-shadow: 0 4px 14px rgba(32, 44, 42, 0.08);
+}
+
+.access-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.access-current-pill {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background-color: var(--portal-primary, #234E43);
+  color: #ffffff;
+}
+
 .access-item-card--feature {
   cursor: default;
 }

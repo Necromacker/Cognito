@@ -1,18 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import './MemoryPairs.css';
 
-export default function MemoryPairs({ question, onAnswer }) {
-  // Use clean retro geometric pixel symbols instead of emojis
-  const defaultCards = [
-    { id: 0, pairId: 0, symbol: '▲' },
-    { id: 1, pairId: 0, symbol: '▲' },
-    { id: 2, pairId: 1, symbol: '■' },
-    { id: 3, pairId: 1, symbol: '■' },
-    { id: 4, pairId: 2, symbol: '●' },
-    { id: 5, pairId: 2, symbol: '●' }
-  ];
+const ALL_SYMBOLS = ['▲', '■', '●', '◆', '★', '♦', '⬟', '◯'];
 
-  const [cards] = useState(defaultCards);
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+export default function MemoryPairs({ question, onAnswer, difficulty = 'easy' }) {
+  const pairCount = difficulty === 'hard' ? 8 : difficulty === 'medium' ? 5 : 3;
+  const gridCols = difficulty === 'hard' ? 4 : difficulty === 'medium' ? 5 : 3;
+
+  const initialCards = useMemo(() => {
+    const symbols = ALL_SYMBOLS.slice(0, pairCount);
+    const cards = [];
+    symbols.forEach((sym, pairId) => {
+      cards.push({ id: pairId * 2, pairId, symbol: sym });
+      cards.push({ id: pairId * 2 + 1, pairId, symbol: sym });
+    });
+    return shuffle(cards);
+  }, [pairCount]);
+
+  const [cards] = useState(initialCards);
   const [flipped, setFlipped] = useState([]);
   const [matched, setMatched] = useState([]);
 
@@ -30,7 +44,7 @@ export default function MemoryPairs({ question, onAnswer }) {
         const nextMatched = [...matched, first.pairId];
         setMatched(nextMatched);
         setFlipped([]);
-        if (nextMatched.length === 3) {
+        if (nextMatched.length === pairCount) {
           setTimeout(() => onAnswer(true, 'Matched all pairs'), 800);
         }
       } else {
@@ -42,9 +56,9 @@ export default function MemoryPairs({ question, onAnswer }) {
   return (
     <div className="memory-pairs-game">
       <div className="game-card-label">SYMBOL MATCHING</div>
-      <h2 className="game-prompt">Find matching pairs</h2>
+      <h2 className="game-prompt">Find matching pairs — {pairCount} pairs</h2>
 
-      <div className="pairs-grid">
+      <div className="pairs-grid" style={{ gridTemplateColumns: `repeat(${gridCols}, 1fr)` }}>
         {cards.map((c, idx) => {
           const isFlipped = flipped.includes(idx) || matched.includes(c.pairId);
           return (

@@ -7,44 +7,44 @@
 
 .jigsaw-board {
   display: grid;
-  grid-template-columns: repeat(2, 130px);
-  grid-template-rows: repeat(2, 130px);
-  gap: 6px;
-  background-color: var(--color-bg-dark);
+  gap: 4px;
+  background-color: #f7f8f4;
   padding: 8px;
-  border-radius: var(--radius-sm);
-  border: 2px solid #000;
-  box-shadow: var(--shadow-retro);
-  margin-top: var(--space-md);
+  border-radius: 12px;
+  border: 2px solid #D5DFD9;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  margin-top: 12px;
 }
 
 .jigsaw-piece {
-  background-size: 260px 260px;
-  border-radius: 2px;
-  border: 1.5px solid #000;
+  width: 100px;
+  height: 100px;
+  border-radius: 6px;
+  border: 1.5px solid #D5DFD9;
   cursor: pointer;
   position: relative;
-  transition: transform 0.05s ease;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  background-color: #eee;
 }
 
 .jigsaw-piece:hover {
-  transform: scale(1.02);
+  transform: scale(1.03);
+  box-shadow: 0 2px 8px rgba(35, 78, 67, 0.15);
 }
 
 .jigsaw-piece--selected {
-  border-color: var(--color-primary) !important;
-  box-shadow: 0 0 0 2px var(--color-primary);
+  border-color: #234E43 !important;
+  box-shadow: 0 0 0 3px rgba(35, 78, 67, 0.3);
 }
 
 .jigsaw-piece-num {
   position: absolute;
-  bottom: 4px;
-  right: 4px;
-  background-color: rgba(0, 0, 0, 0.8);
+  bottom: 3px;
+  right: 3px;
+  background-color: rgba(0, 0, 0, 0.6);
   color: #ffffff;
-  font-family: var(--font-family-mono);
   font-size: 9px;
   font-weight: bold;
   padding: 1px 4px;
-  border-radius: 2px;
+  border-radius: 3px;
 }

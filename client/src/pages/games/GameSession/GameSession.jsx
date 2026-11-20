@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { useTextToSpeech } from '../../../hooks/useTextToSpeech';
 import ProgressBar from '../../../components/ProgressBar/ProgressBar';
@@ -25,8 +25,32 @@ import DailyRoutine from '../DailyRoutine/DailyRoutine';
 
 import './GameSession.css';
 
+// Varied, warm positive reinforcement messages
+const PRAISE_MESSAGES = [
+  'Wonderful! You remembered.',
+  'Great job! That was spot on.',
+  'Well done! Excellent recall.',
+  'Beautiful! You got it right.',
+  'Nicely done! That was fantastic.',
+  'Brilliant! Keep going strong.',
+  'Spot on! That is correct.',
+  'Lovely work! You did that with ease.',
+];
+
+const GENTLE_TRY_MESSAGES = [
+  'Nice try! The answer is: ',
+  'Good effort! The correct answer is: ',
+  'That was close! It was: ',
+  'Keep going! The answer is: ',
+];
+
+function getRandomItem(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
 export default function GameSession() {
   const { gameType } = useParams();
+  const [searchParams] = useSearchParams();
   const { user } = useAuth();
   const navigate = useNavigate();
   const { speak } = useTextToSpeech();
@@ -40,7 +64,14 @@ export default function GameSession() {
   const [isCompleted, setIsCompleted] = useState(false);
   const [feedback, setFeedback] = useState(null);
   const [showHint, setShowHint] = useState(false);
-  const [difficulty, setDifficulty] = useState('easy'); // 'easy', 'medium', 'hard'
+  
+  const initialDiff = searchParams.get('diff') || localStorage.getItem('patient_difficulty') || 'easy';
+  const [difficulty, setDifficulty] = useState(initialDiff);
+
+  const handleDifficultyChange = (newDiff) => {
+    setDifficulty(newDiff);
+    localStorage.setItem('patient_difficulty', newDiff);
+  };
 
   const startTimeRef = useRef(Date.now());
   const questionStartTimeRef = useRef(Date.now());
@@ -108,11 +139,12 @@ export default function GameSession() {
 
     if (isCorrect) {
       setCorrectCount(prev => prev + 1);
-      const msg = 'Wonderful! You remembered.';
+      const msg = getRandomItem(PRAISE_MESSAGES);
       setFeedback({ isCorrect: true, message: msg });
       speak(msg);
     } else {
-      const msg = `Nice try! The answer is: ${adaptedQuestion?.correctAnswer || ''}`;
+      const prefix = getRandomItem(GENTLE_TRY_MESSAGES);
+      const msg = `${prefix}${adaptedQuestion?.correctAnswer || ''}`;
       setFeedback({ isCorrect: false, message: msg });
       speak(msg);
     }
@@ -196,7 +228,7 @@ export default function GameSession() {
 
   const renderGameComponent = () => {
     if (!adaptedQuestion) return <div>No items in this module yet.</div>;
-    const gameProps = { question: adaptedQuestion, onAnswer: handleAnswer, showHint, speak };
+    const gameProps = { question: adaptedQuestion, onAnswer: handleAnswer, showHint, speak, difficulty };
 
     switch (gameType) {
       case 'who-is-this': return <WhoIsThis {...gameProps} />;
@@ -236,7 +268,7 @@ export default function GameSession() {
             <button
               type="button"
               className={`diff-btn ${difficulty === 'easy' ? 'diff-btn--active' : ''}`}
-              onClick={() => setDifficulty('easy')}
+              onClick={() => handleDifficultyChange('easy')}
               title="Easy: 2 choices, gentle hints"
             >
               Easy
@@ -244,7 +276,7 @@ export default function GameSession() {
             <button
               type="button"
               className={`diff-btn ${difficulty === 'medium' ? 'diff-btn--active' : ''}`}
-              onClick={() => setDifficulty('medium')}
+              onClick={() => handleDifficultyChange('medium')}
               title="Medium: 3 choices"
             >
               Medium
@@ -252,7 +284,7 @@ export default function GameSession() {
             <button
               type="button"
               className={`diff-btn ${difficulty === 'hard' ? 'diff-btn--active' : ''}`}
-              onClick={() => setDifficulty('hard')}
+              onClick={() => handleDifficultyChange('hard')}
               title="Hard: 4 choices"
             >
               Hard
@@ -284,7 +316,7 @@ export default function GameSession() {
         {/* Floating Hint Callout Card */}
         {showHint && adaptedQuestion?.hint && (
           <div className="active-hint-callout">
-            <div className="hint-icon">💡</div>
+            <div className="hint-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E9B75B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a6 6 0 0 0-6 6c0 2.8 2 4.5 3 6v2h6v-2c1-1.5 3-3.2 3-6a6 6 0 0 0-6-6z"/><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="21" x2="14" y2="21"/></svg></div>
             <div className="hint-content">
               <span className="hint-label">Gentle Clue:</span>
               <p className="hint-text">{adaptedQuestion.hint}</p>
